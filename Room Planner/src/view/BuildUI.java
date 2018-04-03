@@ -1,12 +1,17 @@
 package view;
 
+import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Toggle;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.ScrollEvent;
@@ -23,9 +28,10 @@ public class BuildUI {
 	private StackPane pane;
 	private Board board;
 	private GridPane floor;
-	private Board copyBoard;
+	private Board copyBoard = new Board();
 	private GridPane modifyBoard;
-	private TilePane imgBox;
+	private TilePane imgBox = new TilePane();
+    private ScrollPane scroll = new ScrollPane(imgBox);
 	private Label columnLabel = new Label("Columns:");
 	private Label rowLabel = new Label("Rows:");
 	private NumberTextField columnText = new NumberTextField();
@@ -51,47 +57,59 @@ public class BuildUI {
     private VBox leftbuttons = new VBox();
     private VBox rightButtons = new VBox();
     private VBox middleButtons = new VBox();
-    private Scene scene;
-    
-    public BuildUI(){	
-    	buildGrid();  	
-    }
+    private RadioButton wood = new RadioButton();
+    private RadioButton stone = new RadioButton();
+    private RadioButton marble = new RadioButton();        
 
-    public HBox buildView(){  	
-    	    	    	    	
-    	copyBoard = new Board(); 	
+    public BuildUI(){	
+    	buildFloor();  	
+    	buildPallet();
+    	buildCopyBoard();
+    	buildButtons();
+    }
+    
+    public void buildCopyBoard(){
+    	
     	copyBoard.setColumn(3);
     	copyBoard.setRow(3);
     	
     	int column = copyBoard.getColumn();
     	int row = copyBoard.getRow();
-    	copyBoard.createBoard(copyBoard, column, row);
+    	copyBoard.createBoard(copyBoard, column, row); 
+    	copyBoard.setId("copy");
+    	
+    }
+    
+    public Toggle getStone(){
+    	return stone;
+    }
+    
+    public Toggle getMarble(){
+    	return marble;
+    }
+    
+    public Toggle getWood(){
+    	return wood;
+    }
+    
+	public void buildButtons(){		
     	
     	modifyBoard = new GridPane();
-
-        imgBox = new TilePane();
-        imgBox.setHgap(5.0);
-        imgBox.setVgap(5.0);
-        imgBox.setPadding(new Insets(5, 5, 5, 5));
-        imgBox.setMinWidth(250);
-        imgBox.setMaxWidth(250);
-
-        ScrollPane scroll = new ScrollPane(imgBox);
-        scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
-        scroll.setMinWidth(250);
-        scroll.setMaxWidth(250);
-
         modifyBoard.add(columnLabel, 0, 0);
         modifyBoard.add(columnText, 1, 0);
         modifyBoard.add(rowLabel, 0, 1);
         modifyBoard.add(rowText, 1, 1);
         modifyBoard.setHgap(10);
         modifyBoard.setVgap(5);    
-
+        
+        wood.setText("Wood");
+        wood.setSelected(true);       
+        stone.setText("Stone");     
+        marble.setText("Marble");
+        		
         leftbuttons.getChildren().addAll(clearBtn, sofaBtn, bedBtn, bathBtn, bookshelfBtn);
         middleButtons.getChildren().addAll(copyBtn, deleteBtn, rotateBtn, widthText, heightText, resizeBtn);
-        rightButtons.getChildren().addAll(clearboardBtn, rotateboardBtn, gridLines, modifyBoard, modifyGran, copyBoard);        
+        rightButtons.getChildren().addAll(clearboardBtn, rotateboardBtn, gridLines, modifyBoard, modifyGran, wood, stone, marble, copyBoard);        
 
         rightButtons.setPadding(new Insets(5, 5, 5, 5));
         rightButtons.setSpacing(10);
@@ -99,7 +117,47 @@ public class BuildUI {
         leftbuttons.setSpacing(10);
         middleButtons.setPadding(new Insets(5, 5, 5, 5));
         middleButtons.setSpacing(10);
+        
+	}
 
+	public void buildPallet(){
+        imgBox.setHgap(5.0);
+        imgBox.setVgap(5.0);
+        imgBox.setPadding(new Insets(5, 5, 5, 5));
+        imgBox.setMinWidth(250);
+        imgBox.setMaxWidth(250);
+
+        scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        scroll.setMinWidth(250);
+        scroll.setMaxWidth(250);
+	}
+
+	public void buildFloor(){
+		
+    	pane = new StackPane();
+    	board = new Board();
+    	floor = new GridPane();
+    	        	
+    	board.setColumn(11);
+    	board.setRow(11); 	 
+    	
+    	int column = board.getColumn();
+    	int row = board.getRow();
+    	board.createBoard(board, column, row);
+    	
+    	board.setMaxWidth(975);
+    	board.setMaxHeight(975);
+    	board.setMinWidth(975);
+    	board.setMinHeight(975);
+    	
+    	board.setFloor(board);           	
+    	board.setBoard(floor);   
+    	        	        	
+	}
+
+    public HBox buildView(){  	
+    	    	    	    	
     	box.getChildren().addAll(leftbuttons, scroll, middleButtons, board, rightButtons);
 
     	box.setStyle("-fx-padding: 10;"
@@ -110,121 +168,111 @@ public class BuildUI {
     	        	
     	return box;
     	
-		}
+	}
     
-    	public void buildGrid(){
-    		
-        	pane = new StackPane();
-        	board = new Board();
-        	floor = new GridPane();
-       	
-        	board.setFloor(board);           	
-        	board.setBoard(floor);   
-        	        	
-        	board.setColumn(11);
-        	board.setRow(11); 	 
-        	
-        	int column = board.getColumn();
-        	int row = board.getRow();
-        	board.createBoard(board, column, row);
-        	
-        	board.setMaxWidth(975);
-        	board.setMaxHeight(975);
-        	board.setMinWidth(975);
-        	board.setMinHeight(975);
-        	        	        	
-    	}
     	
-    	public NumberTextField getWidth(){
-    		return widthText;
-    	}
-    	
-    	public NumberTextField getHeight(){
-    		return heightText;
-    	}
-    	
-    	public void setWidth(String value){
-    		widthText.setText(value);
-    	}
-    	
-    	public void setHeight(String value){
-    		heightText.setText(value);
-    	}
-    	
-    	public Board getCopyGrid(){
-    		return copyBoard;
-    	}
-    	
-    	public Board getGrid(){
-    		return board;
-    	}
-    
-    	public void addAll(ImageView[] image){
-    		imgBox.getChildren().addAll(image);
-    	}
-    	
-    	public void clearAll(){
-    		imgBox.getChildren().clear();
-    	}
-    	
-    	public void addSofaHandler(EventHandler<ActionEvent>handler){
-    		sofaBtn.setOnAction(handler);
-    	}
-    	
-    	public void addBedHandler(EventHandler<ActionEvent>handler){
-    		bedBtn.setOnAction(handler);
-    	}
-    	
-    	public void addBathHandler(EventHandler<ActionEvent>handler){
-    		bathBtn.setOnAction(handler);
-    	}
-    	
-    	public void addBookshelf(EventHandler<ActionEvent>handler){
-    		bookshelfBtn.setOnAction(handler);
-    	}
-    	
-    	public void addClearHandler(EventHandler<ActionEvent>handler){
-    		clearBtn.setOnAction(handler);
-    	}   	 
-    	
-    	public void addDragOverHandler(EventHandler<DragEvent>handler){  		
-    		
-    		board.getChildren().forEach(i -> {		    			
-    			i.setOnDragOver(handler);
-    		});
-    		
-    	}
-    	
-    	public void addDragDroppedHandler(EventHandler<DragEvent>handler){
-    				
-    		board.getChildren().forEach(i -> {
-    			i.setOnDragDropped(handler);
-    		});
-
-    	}
-    	
-        public void addScrollHandler(EventHandler<ScrollEvent>handler){
-        	board.setOnScroll(handler);
-        }    
-        
-        public void addRotateHandler(EventHandler<ActionEvent>handler){
-        	rotateBtn.setOnAction(handler);
-        }
-        
-        public void addResetHandler(EventHandler<ActionEvent>handler){
-        	clearboardBtn.setOnAction(handler);
-        }
-        
-        public void addRotateBoardHandler(EventHandler<ActionEvent>handler){
-        	rotateboardBtn.setOnAction(handler);
-        }
-        
-        public void addCopyHandler(EventHandler<ActionEvent>handler){
-        	copyBtn.setOnAction(handler);
-        }
-        
-        public void addDeleteHandler(EventHandler<ActionEvent>handler){
-        	deleteBtn.setOnAction(handler);
-        }
-        
+    public NumberTextField getWidth(){
+    	return widthText;
     }
+    	
+    public NumberTextField getHeight(){
+    	return heightText;
+    }
+    	
+    public void setWidth(String value){
+    	widthText.setText(value);
+    }
+    	
+    public void setHeight(String value){
+    	heightText.setText(value);
+    }
+    	
+    public Board getCopyGrid(){
+    	return copyBoard;
+    }
+    	
+    public Board getGrid(){
+    	return board;
+    }
+    
+    public void addAll(ImageView[] image){
+    	imgBox.getChildren().addAll(image);
+    }
+    	
+    public void clearAll(){
+    	imgBox.getChildren().clear();
+    }
+    	
+    public void addSofaHandler(EventHandler<ActionEvent>handler){
+    	sofaBtn.setOnAction(handler);
+    }
+    	
+    public void addBedHandler(EventHandler<ActionEvent>handler){
+    	bedBtn.setOnAction(handler);
+    }
+    	
+    public void addBathHandler(EventHandler<ActionEvent>handler){
+    	bathBtn.setOnAction(handler);
+    }
+    	
+    public void addBookshelf(EventHandler<ActionEvent>handler){
+    	bookshelfBtn.setOnAction(handler);
+    }
+    	
+    public void addClearHandler(EventHandler<ActionEvent>handler){
+    	clearBtn.setOnAction(handler);
+    }   	 
+    	
+    public void addDragOverHandler(EventHandler<DragEvent>handler){  		
+    		
+    	board.getChildren().forEach(i -> {		    			
+    		i.setOnDragOver(handler);
+    	});
+    		
+    }
+    	
+    public void addDragDroppedHandler(EventHandler<DragEvent>handler){
+    				
+    	board.getChildren().forEach(i -> {
+    		i.setOnDragDropped(handler);
+    	});
+
+    }
+    	
+    public void addScrollHandler(EventHandler<ScrollEvent>handler){
+       	board.setOnScroll(handler);
+    }    
+        
+    public void addRotateHandler(EventHandler<ActionEvent>handler){
+    	rotateBtn.setOnAction(handler);
+    }
+        
+    public void addResetHandler(EventHandler<ActionEvent>handler){
+        clearboardBtn.setOnAction(handler);
+    }
+        
+    public void addRotateBoardHandler(EventHandler<ActionEvent>handler){
+        rotateboardBtn.setOnAction(handler);
+    }
+        
+    public void addCopyHandler(EventHandler<ActionEvent>handler){
+       	copyBtn.setOnAction(handler);
+    }
+        
+    public void addDeleteHandler(EventHandler<ActionEvent>handler){
+        deleteBtn.setOnAction(handler);
+    }
+    
+    public void addStoneHandler(EventHandler<ActionEvent> handler){
+    	stone.setOnAction(handler);
+    }
+    
+    public void addWoodListener(EventHandler<ActionEvent> handler){
+    	wood.setOnAction(handler);
+    }
+    
+    public void addMarbleListener(EventHandler<ActionEvent> handler){
+    	marble.setOnAction(handler);
+    }
+        
+}

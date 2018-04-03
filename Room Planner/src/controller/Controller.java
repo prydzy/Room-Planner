@@ -7,6 +7,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.SnapshotParameters;
+import javafx.scene.control.Toggle;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
@@ -64,6 +65,34 @@ public class Controller {
 		view.addRotateBoardHandler(this::rotateBoard);
 		view.addCopyHandler(this::copyItem);
 		view.addDeleteHandler(this::deleteItem);
+		view.addStoneHandler(this::toggleStoneHandler);
+		view.addWoodListener(this::toggleWoodHandler);
+		view.addMarbleListener(this::toggleMarbleHandler);
+	
+	}
+	
+	private void toggleStoneHandler(ActionEvent event){
+		board = view.getGrid();
+		view.getStone().setSelected(true);
+		view.getMarble().setSelected(false);
+		view.getWood().setSelected(false);
+		board.setId("stone");
+	}
+	
+	private void toggleWoodHandler(ActionEvent event){
+		board = view.getGrid();
+		view.getStone().setSelected(false);
+		view.getMarble().setSelected(false);
+		view.getWood().setSelected(true);
+		board.setId("wood");
+	}
+	
+	private void toggleMarbleHandler(ActionEvent event){
+		board = view.getGrid();
+		view.getStone().setSelected(false);
+		view.getMarble().setSelected(true);
+		view.getWood().setSelected(false);
+		board.setId("marble");
 	}
 	
     private void addSofa(ActionEvent event){
@@ -119,21 +148,31 @@ public class Controller {
 		});
 	}
 	    
-	private void setTextColumn(double width, double height){
-		String sWidth = Double.toString(width).substring(0, 5);
-		String sHeight = Double.toString(height).substring(0, 5);		
+	private void setTextColumn(double fwidth, double fheight, double width, double height){
+		
+		String sWidth = Double.toString(width);
+		String sHeight = Double.toString(height);
+		
+		System.out.println("FitWidth: " + fwidth + " FitHeight: " + fheight);
+		System.out.println("Width: " + width + " Height: " + height);
+		
 		view.setWidth(sWidth);
 		view.setHeight(sHeight);
+		
+		
 	}
 	
 	private void selectImage(ImageView image){
 		
 		image.setOnMousePressed(i -> {
 			
-			double imageWidth = image.getFitWidth();
-			double imageHeight = image.getFitHeight();
+			double imagefWidth = image.getFitWidth();
+			double imagefHeight = image.getFitHeight();
 			
-			setTextColumn(imageWidth, imageHeight);
+			double imageWidth = image.getImage().getWidth();
+			double imageHeight = image.getImage().getHeight();
+						
+			setTextColumn(imagefWidth, imagefHeight, imageWidth, imageHeight);
 			        			
 			if(!i.isShiftDown() && !i.isControlDown()){
 				group.clearGroup();
@@ -456,6 +495,7 @@ public class Controller {
             		System.out.println("Row: " + j);
             		System.out.println("Column: " + x);
             		copyGrid.add(items.get(count++), j, x);
+            		copyGrid.setId("copy");
             		}
             	}
     		}                                

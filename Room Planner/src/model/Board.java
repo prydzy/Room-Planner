@@ -71,7 +71,7 @@ public class Board extends GridPane {
 	public void deleteBoard() {
 		board.getChildren().clear();
 	}
-	
+		
 	public GridPane createBoard(GridPane board, int column, int row){
     			
 		System.out.println("Board Created");
@@ -84,8 +84,6 @@ public class Board extends GridPane {
 			for(int y = 0; y < row; y++){
 				pane = makePane();
 				board.add(pane, x, y);
-		//		board.setGridLinesVisible(true);
-				board.setId("floor");
 			}
 		}
 		return board;                                  

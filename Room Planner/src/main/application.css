@@ -1,6 +1,15 @@
 .highlight {
     -fx-effect: dropshadow(three-pass-box, white, 4, 1, 0, 0);
 }
-#floor {
-	-fx-background-image:url('file:floor2.jpg');
+#wood {
+	-fx-background-image:url('file:wood.jpg');
+}
+#stone {
+	-fx-background-image:url('file:stone.jpg');
+}
+#marble {
+	-fx-background-image:url('file:marble.jpg');
+}
+#copy {
+	-fx-background-image:url('file:copy.jpg');
 }
