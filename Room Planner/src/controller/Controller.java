@@ -68,7 +68,72 @@ public class Controller {
 		view.addStoneHandler(this::toggleStoneHandler);
 		view.addWoodListener(this::toggleWoodHandler);
 		view.addMarbleListener(this::toggleMarbleHandler);
+		view.addToggleGridHandler(this::toggleGridLines);
+		view.addModifyGranularity(this::modifyGranularity);
 	
+	}
+	
+	private void modifyGranularity(ActionEvent event){
+		
+		board = view.getGrid();
+		
+		int Column = board.getColumn(); 
+		int Row = board.getRow();
+		
+		int newColumn = Integer.parseInt(view.getColumnText());
+		int newRow = Integer.parseInt(view.getRowText());
+		
+		
+		
+	}
+	
+	private void saveBoard(){
+		
+		/*
+		 * 		ArrayList<StackPane> panes = new ArrayList<>();
+		ArrayList<String> images = new ArrayList<>();
+		
+		panes = getAllNodes(board);
+		
+		panes.forEach(i -> {
+			if(i.getChildren().isEmpty() == false){
+				images.add(i.getChildren().toString());
+			}
+			System.out.println(i.getChildren());
+		});
+		
+		System.out.println("Images: " + images);
+		 * 
+		 */
+		
+	}
+	
+	public ArrayList<StackPane> getAllNodes(GridPane board){
+		
+		ArrayList<StackPane> nodes = new ArrayList<>();
+		
+		StackPane pane = new StackPane();
+		
+		for(Node node : board.getChildren()) {
+			pane = (StackPane) node;
+			nodes.add(pane);
+		}
+		
+		return nodes;
+		
+	}
+	
+	private void toggleGridLines(ActionEvent event){
+		
+		board = view.getGrid();
+		
+		board.getChildren().forEach(i -> {
+			if(i.getStyle() == ""){
+				i.setStyle("-fx-border-color: white");
+			} else if (i.getStyle() == "-fx-border-color: white"){
+				i.setStyle("");
+			}
+		});	
 	}
 	
 	private void toggleStoneHandler(ActionEvent event){
@@ -316,6 +381,7 @@ public class Controller {
                	}          		
        		}
        	}     
+    	  	
     }
     
 	private Node getNode(Board board, int col, int row){

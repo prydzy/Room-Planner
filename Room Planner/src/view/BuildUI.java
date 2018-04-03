@@ -25,7 +25,6 @@ import model.Board;
 
 public class BuildUI {
 
-	private StackPane pane;
 	private Board board;
 	private GridPane floor;
 	private Board copyBoard = new Board();
@@ -62,35 +61,11 @@ public class BuildUI {
     private RadioButton marble = new RadioButton();        
 
     public BuildUI(){	
+    	    	
     	buildFloor();  	
     	buildPallet();
-    	buildCopyBoard();
     	buildButtons();
-    }
-    
-    public void buildCopyBoard(){
-    	
-    	copyBoard.setColumn(3);
-    	copyBoard.setRow(3);
-    	
-    	int column = copyBoard.getColumn();
-    	int row = copyBoard.getRow();
-    	copyBoard.createBoard(copyBoard, column, row); 
-    	copyBoard.setId("copy");
-    	
-    }
-    
-    public Toggle getStone(){
-    	return stone;
-    }
-    
-    public Toggle getMarble(){
-    	return marble;
-    }
-    
-    public Toggle getWood(){
-    	return wood;
-    }
+    } 
     
 	public void buildButtons(){		
     	
@@ -102,13 +77,19 @@ public class BuildUI {
         modifyBoard.setHgap(10);
         modifyBoard.setVgap(5);    
         
+        String columnString = Integer.toString(board.getColumn());
+        String rowString = Integer.toString(board.getRow());
+        
+        columnText.setText(columnString);
+        rowText.setText(rowString);
+        
         wood.setText("Wood");
         wood.setSelected(true);       
         stone.setText("Stone");     
         marble.setText("Marble");
-        		
+                		
         leftbuttons.getChildren().addAll(clearBtn, sofaBtn, bedBtn, bathBtn, bookshelfBtn);
-        middleButtons.getChildren().addAll(copyBtn, deleteBtn, rotateBtn, widthText, heightText, resizeBtn);
+        middleButtons.getChildren().addAll(rotateBtn, copyBtn, deleteBtn, widthText, heightText, resizeBtn);
         rightButtons.getChildren().addAll(clearboardBtn, rotateboardBtn, gridLines, modifyBoard, modifyGran, wood, stone, marble, copyBoard);        
 
         rightButtons.setPadding(new Insets(5, 5, 5, 5));
@@ -121,6 +102,7 @@ public class BuildUI {
 	}
 
 	public void buildPallet(){
+		
         imgBox.setHgap(5.0);
         imgBox.setVgap(5.0);
         imgBox.setPadding(new Insets(5, 5, 5, 5));
@@ -131,11 +113,11 @@ public class BuildUI {
         scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         scroll.setMinWidth(250);
         scroll.setMaxWidth(250);
+        
 	}
 
 	public void buildFloor(){
 		
-    	pane = new StackPane();
     	board = new Board();
     	floor = new GridPane();
     	        	
@@ -146,10 +128,10 @@ public class BuildUI {
     	int row = board.getRow();
     	board.createBoard(board, column, row);
     	
-    	board.setMaxWidth(975);
-    	board.setMaxHeight(975);
-    	board.setMinWidth(975);
-    	board.setMinHeight(975);
+    	board.setMaxWidth(950);
+    	board.setMaxHeight(950);
+    	board.setMinWidth(950);
+    	board.setMinHeight(950);
     	
     	board.setFloor(board);           	
     	board.setBoard(floor);   
@@ -163,13 +145,32 @@ public class BuildUI {
     	box.setStyle("-fx-padding: 10;"
                 + "-fx-border-style: solid inside;"
                 + "-fx-border-width: 2;"
-                + "-fx-border-insets: 5;"
-                + "-fx-border-radius: 5;");
+                + "-fx-border-insets: 15;"
+                + "-fx-border-radius: 2;");
     	        	
     	return box;
     	
 	}
     
+    public String getColumnText(){
+    	return columnText.getText();
+    }
+    
+    public String getRowText(){
+    	return rowText.getText();
+    }
+    
+    public Toggle getStone(){
+    	return stone;
+    }
+    
+    public Toggle getMarble(){
+    	return marble;
+    }
+    
+    public Toggle getWood(){
+    	return wood;
+    }
     	
     public NumberTextField getWidth(){
     	return widthText;
@@ -261,6 +262,14 @@ public class BuildUI {
         
     public void addDeleteHandler(EventHandler<ActionEvent>handler){
         deleteBtn.setOnAction(handler);
+    }
+    
+    public void addToggleGridHandler(EventHandler<ActionEvent>handler){
+    	gridLines.setOnAction(handler);
+    }
+    
+    public void addModifyGranularity(EventHandler<ActionEvent>handler){
+    	modifyGran.setOnAction(handler);
     }
     
     public void addStoneHandler(EventHandler<ActionEvent> handler){

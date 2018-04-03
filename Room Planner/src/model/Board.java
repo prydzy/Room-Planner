@@ -15,7 +15,7 @@ public class Board extends GridPane {
 
 	public Board(){
 	}
-
+	
 	public Board getFloor(){
 		return floor;
 	}
@@ -72,21 +72,30 @@ public class Board extends GridPane {
 		board.getChildren().clear();
 	}
 		
-	public GridPane createBoard(GridPane board, int column, int row){
+	public void setStyle(){
+		
+	}
+	
+	public void createBoard(GridPane board, int column, int row){
     			
 		System.out.println("Board Created");
 		
 		this.board = board;
 		this.column = column;
 		this.row = row;
-	    	
+	    			
 		for(int x = 0; x < column; x++){
 			for(int y = 0; y < row; y++){
 				pane = makePane();
 				board.add(pane, x, y);
+				board.setId("wood");
 			}
 		}
-		return board;                                  
+		
+	}
+	
+	public void isEmpty(){
+		
 	}
 	
 	public StackPane makePane(){
@@ -94,7 +103,6 @@ public class Board extends GridPane {
 		pane.setPrefHeight(100);
 		pane.setPrefWidth(100);              
 		pane.setPadding(new Insets(5, 5, 5, 5));
-    	pane.setStyle("-fx-border-color: white");
         return pane;
 	}
 	    
