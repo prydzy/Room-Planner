@@ -25,6 +25,8 @@ import model.Board;
 
 public class BuildUI {
 
+	
+	//set board and floor methods globally.
 	private Board board;
 	private GridPane floor;
 	private Board copyBoard = new Board();
@@ -56,6 +58,7 @@ public class BuildUI {
     private VBox leftbuttons = new VBox();
     private VBox rightButtons = new VBox();
     private VBox middleButtons = new VBox();
+    private VBox saveButtons = new VBox();
     private RadioButton wood = new RadioButton();
     private RadioButton stone = new RadioButton();
     private RadioButton marble = new RadioButton();        
@@ -88,9 +91,10 @@ public class BuildUI {
         stone.setText("Stone");     
         marble.setText("Marble");
                 		
+        saveButtons.getChildren().addAll(saveButton, loadButton);
         leftbuttons.getChildren().addAll(clearBtn, sofaBtn, bedBtn, bathBtn, bookshelfBtn);
         middleButtons.getChildren().addAll(rotateBtn, copyBtn, deleteBtn, widthText, heightText, resizeBtn);
-        rightButtons.getChildren().addAll(clearboardBtn, rotateboardBtn, gridLines, modifyBoard, modifyGran, wood, stone, marble, copyBoard);        
+        rightButtons.getChildren().addAll(clearboardBtn, rotateboardBtn, gridLines, modifyBoard, modifyGran, wood, stone, marble, copyBoard, saveButtons);        
 
         rightButtons.setPadding(new Insets(5, 5, 5, 5));
         rightButtons.setSpacing(10);
@@ -284,4 +288,8 @@ public class BuildUI {
     	marble.setOnAction(handler);
     }
         
+    public void addSaveHandler(EventHandler<ActionEvent> handler){
+    	saveButton.setOnAction(handler);
+    }
+    
 }

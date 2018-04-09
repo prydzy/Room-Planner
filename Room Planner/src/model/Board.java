@@ -88,20 +88,17 @@ public class Board extends GridPane {
 			for(int y = 0; y < row; y++){
 				pane = makePane();
 				board.add(pane, x, y);
-				board.setId("wood");
+				board.setId("wood");				
 			}
 		}
 		
 	}
-	
-	public void isEmpty(){
-		
-	}
-	
+
 	public StackPane makePane(){
 		StackPane pane = new StackPane();
-		pane.setPrefHeight(100);
-		pane.setPrefWidth(100);              
+		pane.setStyle("-fx-border-color: white");
+		pane.setPrefHeight(125);
+		pane.setPrefWidth(125);              
 		pane.setPadding(new Insets(5, 5, 5, 5));
         return pane;
 	}

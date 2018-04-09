@@ -1,7 +1,10 @@
 package controller;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
@@ -10,6 +13,7 @@ import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Toggle;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.DragEvent;
@@ -25,6 +29,7 @@ import javafx.scene.transform.Rotate;
 
 import model.Board;
 import model.Group;
+import model.LocatedImage;
 import model.Pallet;
 import view.BuildUI;
 
@@ -52,6 +57,7 @@ public class Controller {
 	}
 
 	private void attachEventHandler(){
+		
 		view.addSofaHandler(this::addSofa);
 		view.addBedHandler(this::addBed);
 		view.addBathHandler(this::addBath);
@@ -70,10 +76,37 @@ public class Controller {
 		view.addMarbleListener(this::toggleMarbleHandler);
 		view.addToggleGridHandler(this::toggleGridLines);
 		view.addModifyGranularity(this::modifyGranularity);
+		view.addSaveHandler(arg0 -> {
+			try {
+				saveBoardHandling(arg0);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		});
 	
 	}
 	
+	private void createFile(String file, ArrayList<String> arrData)
+            throws IOException {
+        FileWriter writer = new FileWriter(file + ".txt");
+        int size = arrData.size();
+        for (int i=0;i<size;i++) {
+            String str = arrData.get(i).toString();
+            writer.write(str);
+            if(i < size-1)
+                writer.write("\n");
+        }
+        writer.close();
+    }
+	
+	private void saveBoardHandling(ActionEvent event) throws IOException{
+		board = view.getGrid();
+		ArrayList<String> save = saveBoard();
+		createFile("BoardString", save);
+	}
+	
 	private void modifyGranularity(ActionEvent event){
+		
 		
 		board = view.getGrid();
 		
@@ -83,28 +116,32 @@ public class Controller {
 		int newColumn = Integer.parseInt(view.getColumnText());
 		int newRow = Integer.parseInt(view.getRowText());
 		
+		resetBoard();
+		board.createBoard(board, newColumn, newRow);
 		
+		view.addDragOverHandler(this::addDragOverHandling);
+		view.addDragDroppedHandler(this::addDragDroppedHandling);
 		
 	}
 	
-	private void saveBoard(){
+	private ArrayList<String> saveBoard(){
 		
-		/*
-		 * 		ArrayList<StackPane> panes = new ArrayList<>();
+		board = view.getGrid();
+		
+		ArrayList<StackPane> panes = new ArrayList<>();
 		ArrayList<String> images = new ArrayList<>();
 		
 		panes = getAllNodes(board);
 		
 		panes.forEach(i -> {
-			if(i.getChildren().isEmpty() == false){
 				images.add(i.getChildren().toString());
-			}
-			System.out.println(i.getChildren());
 		});
 		
 		System.out.println("Images: " + images);
-		 * 
-		 */
+		System.out.println("Panes: " + panes);
+
+
+		return images;
 		
 	}
 	
@@ -161,22 +198,23 @@ public class Controller {
 	}
 	
     private void addSofa(ActionEvent event){
-    	Image bed = new Image("file:sofa.png");
+    	Image bed = new LocatedImage("file:sofa.png");
     	addFurniture(bed);   	    	
     }
     
     private void addBed(ActionEvent event){
-    	Image bed = new Image("file:bed.png");
+    	Image bed = new LocatedImage("file:bed.png");
     	addFurniture(bed);   	    	
     }
     
-    private void addBath(ActionEvent event){
-    	Image bed = new Image("file:bath.png");
+	private void addBath(ActionEvent event){
+    	Image bed = new LocatedImage("file:bath.png");
     	addFurniture(bed);   	    	
+    	System.out.println(bed);
     }
     
     private void addBookshelf(ActionEvent event){
-    	Image bed = new Image("file:bookshelf.png");
+    	Image bed = new LocatedImage("file:bookshelf.png");
     	addFurniture(bed);   	    	
     }
     
