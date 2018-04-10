@@ -1,6 +1,7 @@
 package main;
 
 import controller.Controller;
+import controller.UIController;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -26,6 +27,7 @@ public class AppLoader extends Application {
         Board board = new Board();         
         
         new Controller(view, board, pallet, group);
+        new UIController(view, board, pallet, group);
                
     }
 

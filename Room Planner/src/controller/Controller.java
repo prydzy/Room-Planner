@@ -10,6 +10,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.SnapshotParameters;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Toggle;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -47,7 +48,8 @@ public class Controller {
 	private Integer[] aCoords = new Integer[2];
 	private double imageWidth;
 	private double imageHeight;
-
+	private Pane room;
+	
 	public Controller(BuildUI view, Board board, Pallet pallet, Group group){
 		this.view = view;
 		this.board = board;
@@ -68,50 +70,32 @@ public class Controller {
 		view.addScrollHandler(this::addScrollHandling);
 		view.addRotateHandler(this::addKeyHandling);
 		view.addResetHandler(this::clearBoardHandling);
-		view.addRotateBoardHandler(this::rotateBoard);
 		view.addCopyHandler(this::copyItem);
 		view.addDeleteHandler(this::deleteItem);
-		view.addStoneHandler(this::toggleStoneHandler);
-		view.addWoodListener(this::toggleWoodHandler);
-		view.addMarbleListener(this::toggleMarbleHandler);
-		view.addToggleGridHandler(this::toggleGridLines);
 		view.addModifyGranularity(this::modifyGranularity);
-		view.addSaveHandler(arg0 -> {
-			try {
-				saveBoardHandling(arg0);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		});
-	
-	}
-	
-	private void createFile(String file, ArrayList<String> arrData)
-            throws IOException {
-        FileWriter writer = new FileWriter(file + ".txt");
-        int size = arrData.size();
-        for (int i=0;i<size;i++) {
-            String str = arrData.get(i).toString();
-            writer.write(str);
-            if(i < size-1)
-                writer.write("\n");
-        }
-        writer.close();
-    }
-	
-	private void saveBoardHandling(ActionEvent event) throws IOException{
-		board = view.getGrid();
-		ArrayList<String> save = saveBoard();
-		createFile("BoardString", save);
+		view.addChairHandler(this::addChair);
+		view.addDeskHandler(this::addDesk);
+		view.addFridgeHandler(this::addFridge);
+		view.addTableHandler(this::addLongtable);
+		view.addOvenHandler(this::addOven);
+		view.addShowerHandler(this::addShower);
+		view.addSinkHandler(this::addSink);
+		view.addbSinkHandler(this::addSink1);
+		view.addDeskchairHandler(this::addDchair);
+		view.addTvHandler(this::addTV);
+		view.addSquareTableHandler(this::addSquareTable);
+		view.addSideboardHandler(this::addSideBoard);
+		view.addWardrobeHandler(this::addWardrobe);
+		view.addDrawerHandler(this::addDrawer);
+		view.addVanityUnitHandler(this::addVanityUnit);
+		view.addWorkTopHandler(this::addWorkTop);
+		view.addPoolTableHandler(this::addPoolTable);
+		view.addRugHandler(this::addRug);
 	}
 	
 	private void modifyGranularity(ActionEvent event){
-		
-		
+			
 		board = view.getGrid();
-		
-		int Column = board.getColumn(); 
-		int Row = board.getRow();
 		
 		int newColumn = Integer.parseInt(view.getColumnText());
 		int newRow = Integer.parseInt(view.getRowText());
@@ -124,82 +108,98 @@ public class Controller {
 		
 	}
 	
-	private ArrayList<String> saveBoard(){
-		
-		board = view.getGrid();
-		
-		ArrayList<StackPane> panes = new ArrayList<>();
-		ArrayList<String> images = new ArrayList<>();
-		
-		panes = getAllNodes(board);
-		
-		panes.forEach(i -> {
-				images.add(i.getChildren().toString());
-		});
-		
-		System.out.println("Images: " + images);
-		System.out.println("Panes: " + panes);
-
-
-		return images;
-		
-	}
-	
-	public ArrayList<StackPane> getAllNodes(GridPane board){
-		
-		ArrayList<StackPane> nodes = new ArrayList<>();
-		
-		StackPane pane = new StackPane();
-		
-		for(Node node : board.getChildren()) {
-			pane = (StackPane) node;
-			nodes.add(pane);
-		}
-		
-		return nodes;
-		
-	}
-	
-	private void toggleGridLines(ActionEvent event){
-		
-		board = view.getGrid();
-		
-		board.getChildren().forEach(i -> {
-			if(i.getStyle() == ""){
-				i.setStyle("-fx-border-color: white");
-			} else if (i.getStyle() == "-fx-border-color: white"){
-				i.setStyle("");
-			}
-		});	
-	}
-	
-	private void toggleStoneHandler(ActionEvent event){
-		board = view.getGrid();
-		view.getStone().setSelected(true);
-		view.getMarble().setSelected(false);
-		view.getWood().setSelected(false);
-		board.setId("stone");
-	}
-	
-	private void toggleWoodHandler(ActionEvent event){
-		board = view.getGrid();
-		view.getStone().setSelected(false);
-		view.getMarble().setSelected(false);
-		view.getWood().setSelected(true);
-		board.setId("wood");
-	}
-	
-	private void toggleMarbleHandler(ActionEvent event){
-		board = view.getGrid();
-		view.getStone().setSelected(false);
-		view.getMarble().setSelected(true);
-		view.getWood().setSelected(false);
-		board.setId("marble");
-	}
-	
     private void addSofa(ActionEvent event){
-    	Image bed = new LocatedImage("file:sofa.png");
-    	addFurniture(bed);   	    	
+    	Image sofa = new LocatedImage("file:sofa.png");
+    	addFurniture(sofa);   	    	
+    }
+       
+    private void addSideBoard(ActionEvent event){
+    	Image sideboard = new LocatedImage("file:sideboard.png");
+    	addFurniture(sideboard);     }
+    
+    private void addSquareTable(ActionEvent event){
+    	Image squaretable = new LocatedImage("file:squaretable.png");
+    	addFurniture(squaretable); 
+    }
+    
+    private void addTV(ActionEvent event){
+    	Image tv = new LocatedImage("file:tv.png");
+    	addFurniture(tv);   	    	
+    }
+    
+    private void addPoolTable(ActionEvent event){
+    	Image pooltable = new LocatedImage("file:pooltable.png");
+    	addFurniture(pooltable);   
+    }
+    
+    private void addRug(ActionEvent event){
+    	Image rug = new LocatedImage("file:rug.png");
+    	addFurniture(rug);   
+    }
+    
+    private void addWorkTop(ActionEvent event){
+    	Image worktop = new LocatedImage("file:worktop.png");
+    	addFurniture(worktop);   	    	
+    }
+    
+    private void addWardrobe(ActionEvent event){
+    	Image wardrobe = new LocatedImage("file:wardrobe.png");
+    	addFurniture(wardrobe);   	    	
+    }
+    
+    private void addDrawer(ActionEvent event){
+    	Image drawer = new LocatedImage("file:drawer.png");
+    	addFurniture(drawer);   	    	
+    }
+    
+    private void addChair(ActionEvent event){
+    	Image chair = new LocatedImage("file:chair.png");
+    	addFurniture(chair);   	    	
+    }
+    
+    private void addDchair(ActionEvent event){
+    	Image dchair = new LocatedImage("file:dchair.png");
+    	addFurniture(dchair);   	    	
+    }
+    
+    private void addDesk(ActionEvent event){
+    	Image desk = new LocatedImage("file:desk.png");
+    	addFurniture(desk);
+    }
+    
+    private void addFridge(ActionEvent event){
+    	Image fridge = new LocatedImage("file:fridge.png");
+    	addFurniture(fridge);
+    }
+    
+    private void addLongtable(ActionEvent event){
+    	Image ltable = new LocatedImage("file:ltable.png");
+    	addFurniture(ltable);
+    }
+    
+    private void addVanityUnit(ActionEvent event){
+    	Image vanityunit = new LocatedImage("file:vanityunit.png");
+    	addFurniture(vanityunit);
+    }
+    
+    private void addOven(ActionEvent event){
+    	Image oven = new LocatedImage("file:oven.png");
+    	addFurniture(oven);
+    }
+    
+    private void addShower(ActionEvent event){
+    	Image shower = new LocatedImage("file:shower.png");
+    	addFurniture(shower);
+    }
+    
+    private void addSink(ActionEvent event){
+    	Image sink = new LocatedImage("file:sink.png");
+    	addFurniture(sink);
+    }
+    
+    private void addSink1(ActionEvent event){
+    	Image sink1 = new LocatedImage("file:sink1.png");
+    	addFurniture(sink1);
     }
     
     private void addBed(ActionEvent event){
@@ -208,9 +208,8 @@ public class Controller {
     }
     
 	private void addBath(ActionEvent event){
-    	Image bed = new LocatedImage("file:bath.png");
-    	addFurniture(bed);   	    	
-    	System.out.println(bed);
+    	Image bath = new LocatedImage("file:bath.png");
+    	addFurniture(bath);   	    	
     }
     
     private void addBookshelf(ActionEvent event){
@@ -554,11 +553,6 @@ public class Controller {
     	System.out.println("Board Cleared");
     	board = view.getGrid();
     	board.getChildren().clear();
-    }
-    
-    private void rotateBoard(ActionEvent event){
-    	board = view.getGrid();
-    	board.setRotate(board.getRotate() + 90);
     }
     
     private void copyItem(ActionEvent event){

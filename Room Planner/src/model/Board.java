@@ -102,5 +102,4 @@ public class Board extends GridPane {
 		pane.setPadding(new Insets(5, 5, 5, 5));
         return pane;
 	}
-	    
 }

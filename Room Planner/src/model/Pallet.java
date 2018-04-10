@@ -10,10 +10,10 @@ public class Pallet {
 
     private List<Image> AllImages = new LinkedList<Image>();
 	private ImageView[] imageView;
-
+	
 	public Pallet(){
 	}
-	
+		
 	public List<Image> getAllImages() {
 		return AllImages;
 	}

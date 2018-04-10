@@ -1,0 +1,1 @@
+[ImageView@72f59033[styleClass=image-view highlight]]

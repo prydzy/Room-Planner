@@ -1,22 +1,20 @@
 package view;
 
-import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.MenuBar;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Toggle;
-import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
@@ -25,8 +23,6 @@ import model.Board;
 
 public class BuildUI {
 
-	
-	//set board and floor methods globally.
 	private Board board;
 	private GridPane floor;
 	private Board copyBoard = new Board();
@@ -39,10 +35,18 @@ public class BuildUI {
 	private NumberTextField rowText = new NumberTextField();
 	private NumberTextField widthText = new NumberTextField();
 	private NumberTextField heightText = new NumberTextField();
-	private Button sofaBtn = new Button("Add Sofa");
-	private Button bedBtn = new Button("Add Bed");
-	private Button bookshelfBtn = new Button("Add Book Shelf");
-	private Button bathBtn = new Button("Add Bath");
+	private Button sofaBtn = new Button("Sofa");
+	private Button bedBtn = new Button("Bed");
+	private Button bookshelfBtn = new Button("Book Shelf");
+	private Button wardrobeBtn = new Button("Wardrobe");
+	private Button deskBtn = new Button("Desk");
+	private Button tvBtn = new Button("TV");
+	private Button deskchairBtn = new Button("Desk Chair");
+	private Button drawerBtn = new Button("Drawer");
+	private Button tableBtn = new Button("Table");
+	private Button chairBtn = new Button("Sofa Chair");
+	private Button squaretableBtn = new Button("Square Table");
+	private Button sideBtn = new Button("Sideboard");
 	private Button clearBtn = new Button("Clear Pallet");
 	private Button clearboardBtn = new Button("Reset Board");
 	private Button rotateboardBtn = new Button("Rotate Board");
@@ -54,6 +58,16 @@ public class BuildUI {
 	private Button resizeBtn = new Button("Resize Item");
 	private Button saveButton = new Button("Save");
 	private Button loadButton = new Button("Load");
+	private Button sinkBtn = new Button("Sink");
+	private Button fridgeBtn = new Button("Fridge");
+	private Button worktopBtn = new Button("Work Top");
+	private Button ovenBtn = new Button("Oven");
+	private Button bathBtn = new Button("Bath");
+	private Button showerBtn = new Button("Shower");
+	private Button bathroomsinkBtn = new Button("Bathroom Sink");
+	private Button sideunitBtn = new Button("Vanity Unit");
+	private Button rugBtn = new Button("Rug");
+	private Button pooltableBtn = new Button("Pool Table");
     private HBox box = new HBox(5);
     private VBox leftbuttons = new VBox();
     private VBox rightButtons = new VBox();
@@ -61,8 +75,16 @@ public class BuildUI {
     private VBox saveButtons = new VBox();
     private RadioButton wood = new RadioButton();
     private RadioButton stone = new RadioButton();
-    private RadioButton marble = new RadioButton();        
-
+    private RadioButton marble = new RadioButton();    
+    private StackPane rooms = new StackPane();
+    private Pane bedroom = new Pane();
+    private Pane kitchen = new Pane();
+    private Pane livingroom = new Pane();
+    private Pane bathroom = new Pane();
+    private Pane misc = new Pane();
+    private int btnOffset = 35;
+    private ComboBox<String> furniture = new ComboBox<String>();  
+    
     public BuildUI(){	
     	    	
     	buildFloor();  	
@@ -91,8 +113,45 @@ public class BuildUI {
         stone.setText("Stone");     
         marble.setText("Marble");
                 		
-        saveButtons.getChildren().addAll(saveButton, loadButton);
-        leftbuttons.getChildren().addAll(clearBtn, sofaBtn, bedBtn, bathBtn, bookshelfBtn);
+        saveButtons.getChildren().addAll(saveButton, loadButton);                 
+        furniture.getItems().addAll("Furniture Selection","Bedroom", "Living Room", "Bathroom", "Kitchen", "Misc");
+        furniture.getSelectionModel().selectFirst();
+        
+        bathroom.getChildren().addAll(sideunitBtn, bathroomsinkBtn, bathBtn, showerBtn);
+        bathroom.setVisible(false);
+        kitchen.getChildren().addAll(sinkBtn, ovenBtn, worktopBtn, fridgeBtn); 
+        kitchen.setVisible(false);           
+        bedroom.getChildren().addAll(bedBtn, deskBtn, deskchairBtn, drawerBtn, wardrobeBtn);
+        bedroom.setVisible(false);
+        livingroom.getChildren().addAll(sofaBtn, squaretableBtn, chairBtn, tableBtn, tvBtn, sideBtn);
+        livingroom.setVisible(false);      
+        misc.getChildren().addAll(pooltableBtn, rugBtn);
+        misc.setVisible(false);
+        
+        rooms.getChildren().addAll(bedroom, kitchen, bathroom, livingroom, misc);       
+        rooms.setPickOnBounds(false);
+                       
+        for(int i = 0; i < bedroom.getChildren().size(); i++){
+        	bedroom.getChildren().get(i).setLayoutY(i*btnOffset);
+        }
+        
+        for(int i = 0; i < kitchen.getChildren().size(); i++){
+        	kitchen.getChildren().get(i).setLayoutY(i*btnOffset);
+        }
+        
+        for(int i = 0; i < livingroom.getChildren().size(); i++){
+        	livingroom.getChildren().get(i).setLayoutY(i*btnOffset);
+        }
+        
+        for(int i = 0; i < bathroom.getChildren().size(); i++){
+        	bathroom.getChildren().get(i).setLayoutY(i*btnOffset);
+        }
+        
+        for(int i = 0; i < misc.getChildren().size(); i++){
+        	misc.getChildren().get(i).setLayoutY(i*btnOffset);
+        }
+        
+        leftbuttons.getChildren().addAll(clearBtn, furniture, rooms);        
         middleButtons.getChildren().addAll(rotateBtn, copyBtn, deleteBtn, widthText, heightText, resizeBtn);
         rightButtons.getChildren().addAll(clearboardBtn, rotateboardBtn, gridLines, modifyBoard, modifyGran, wood, stone, marble, copyBoard, saveButtons);        
 
@@ -156,6 +215,30 @@ public class BuildUI {
     	
 	}
     
+    public ComboBox<String> getChoice(){
+    	return furniture;
+    }
+    
+    public Pane getBedroom(){
+    	return bedroom;
+    }
+    
+    public Pane getLivingroom(){
+    	return livingroom;
+    }
+    
+    public Pane getKitchen(){
+    	return kitchen;
+    }
+    
+    public Pane getBathroom(){
+    	return bathroom;
+    }
+    
+    public Pane getMisc(){
+    	return misc;
+    }
+    
     public String getColumnText(){
     	return columnText.getText();
     }
@@ -208,6 +291,10 @@ public class BuildUI {
     	imgBox.getChildren().clear();
     }
     	
+    public void addChoiceBoxHandler(EventHandler<ActionEvent>handler){
+    	furniture.setOnAction(handler);
+    }
+    
     public void addSofaHandler(EventHandler<ActionEvent>handler){
     	sofaBtn.setOnAction(handler);
     }
@@ -216,6 +303,78 @@ public class BuildUI {
     	bedBtn.setOnAction(handler);
     }
     	
+    public void addChairHandler(EventHandler<ActionEvent>handler){
+    	chairBtn.setOnAction(handler);
+    }
+    
+    public void addDeskHandler(EventHandler<ActionEvent>handler){
+    	deskBtn.setOnAction(handler);
+    }
+    
+    public void addSquareTableHandler(EventHandler<ActionEvent>handler){
+    	squaretableBtn.setOnAction(handler);
+    }
+    
+    public void addSideboardHandler(EventHandler<ActionEvent>handler){
+    	sideBtn.setOnAction(handler);
+    }
+    
+    public void addDrawerHandler(EventHandler<ActionEvent>handler){
+    	drawerBtn.setOnAction(handler);
+    }
+    
+    public void addWardrobeHandler(EventHandler<ActionEvent>handler){
+    	wardrobeBtn.setOnAction(handler);
+    }
+    
+    public void addPoolTableHandler(EventHandler<ActionEvent>handler){
+    	pooltableBtn.setOnAction(handler);
+    }
+    
+    public void addRugHandler(EventHandler<ActionEvent>handler){
+    	rugBtn.setOnAction(handler);
+    }
+    
+    public void addVanityUnitHandler(EventHandler<ActionEvent>handler){
+    	sideunitBtn.setOnAction(handler);
+    }
+    
+    public void addDeskchairHandler(EventHandler<ActionEvent>handler){
+    	deskchairBtn.setOnAction(handler);
+    }
+    
+    public void addFridgeHandler(EventHandler<ActionEvent>handler){
+    	fridgeBtn.setOnAction(handler);
+    }
+    
+    public void addWorkTopHandler(EventHandler<ActionEvent>handler){
+    	worktopBtn.setOnAction(handler);
+    }
+    
+    public void addTableHandler(EventHandler<ActionEvent>handler){
+    	tableBtn.setOnAction(handler);
+    }
+    
+    public void addOvenHandler(EventHandler<ActionEvent>handler){
+    	ovenBtn.setOnAction(handler);
+    }
+    
+    public void addShowerHandler(EventHandler<ActionEvent>handler){
+    	showerBtn.setOnAction(handler);
+    }
+    
+    public void addTvHandler(EventHandler<ActionEvent>handler){
+    	tvBtn.setOnAction(handler);
+    }
+    
+    public void addSinkHandler(EventHandler<ActionEvent>handler){
+    	sinkBtn.setOnAction(handler);
+    }
+    
+    public void addbSinkHandler(EventHandler<ActionEvent>handler){
+    	bathroomsinkBtn.setOnAction(handler);
+    }
+    
     public void addBathHandler(EventHandler<ActionEvent>handler){
     	bathBtn.setOnAction(handler);
     }
