@@ -1,20 +1,14 @@
 package controller;
 
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.SnapshotParameters;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Toggle;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.image.WritableImage;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.DragEvent;
@@ -46,10 +40,7 @@ public class Controller {
     private ImageView draggingImage;  
 	private Integer[] bCoords = new Integer[2];
 	private Integer[] aCoords = new Integer[2];
-	private double imageWidth;
-	private double imageHeight;
-	private Pane room;
-	
+
 	public Controller(BuildUI view, Board board, Pallet pallet, Group group){
 		this.view = view;
 		this.board = board;
@@ -72,7 +63,6 @@ public class Controller {
 		view.addResetHandler(this::clearBoardHandling);
 		view.addCopyHandler(this::copyItem);
 		view.addDeleteHandler(this::deleteItem);
-		view.addModifyGranularity(this::modifyGranularity);
 		view.addChairHandler(this::addChair);
 		view.addDeskHandler(this::addDesk);
 		view.addFridgeHandler(this::addFridge);
@@ -91,21 +81,43 @@ public class Controller {
 		view.addWorkTopHandler(this::addWorkTop);
 		view.addPoolTableHandler(this::addPoolTable);
 		view.addRugHandler(this::addRug);
+		view.addSliderHandler(this::addSliderHandling);
 	}
-	
-	private void modifyGranularity(ActionEvent event){
-			
+
+	private void addSliderHandling(MouseEvent event){
 		board = view.getGrid();
 		
-		int newColumn = Integer.parseInt(view.getColumnText());
-		int newRow = Integer.parseInt(view.getRowText());
+		int newColumn = 0;
+		int newRow = 0;
+		
+		int count = 0;
+		count = (int) view.getSlider().getValue();			
+		
+		switch (count) {
+			default:newColumn = 7; 
+					newRow = 7;
+					break;
+			case 1: newColumn = 8; 
+					newRow = 8;
+					break;
+			case 2: newColumn = 9; 
+					newRow = 9;
+					break;
+			case 3: newColumn = 10; 
+					newRow = 10;
+					break;
+			case 4: newColumn = 11; 
+					newRow = 11;
+					break;		
+			case 5: newColumn = 12; 
+					newRow = 12;
+					break;
+		}
 		
 		resetBoard();
-		board.createBoard(board, newColumn, newRow);
-		
+		board.createBoard(board, newColumn, newRow);	
 		view.addDragOverHandler(this::addDragOverHandling);
 		view.addDragDroppedHandler(this::addDragDroppedHandling);
-		
 	}
 	
     private void addSofa(ActionEvent event){
@@ -115,7 +127,8 @@ public class Controller {
        
     private void addSideBoard(ActionEvent event){
     	Image sideboard = new LocatedImage("file:sideboard.png");
-    	addFurniture(sideboard);     }
+    	addFurniture(sideboard);     
+    }
     
     private void addSquareTable(ActionEvent event){
     	Image squaretable = new LocatedImage("file:squaretable.png");
@@ -250,19 +263,6 @@ public class Controller {
 		});
 	}
 	    
-	private void setTextColumn(double fwidth, double fheight, double width, double height){
-		
-		String sWidth = Double.toString(width);
-		String sHeight = Double.toString(height);
-		
-		System.out.println("FitWidth: " + fwidth + " FitHeight: " + fheight);
-		System.out.println("Width: " + width + " Height: " + height);
-		
-		view.setWidth(sWidth);
-		view.setHeight(sHeight);
-		
-		
-	}
 	
 	private void selectImage(ImageView image){
 		
@@ -273,9 +273,7 @@ public class Controller {
 			
 			double imageWidth = image.getImage().getWidth();
 			double imageHeight = image.getImage().getHeight();
-						
-			setTextColumn(imagefWidth, imagefHeight, imageWidth, imageHeight);
-			        			
+									        			
 			if(!i.isShiftDown() && !i.isControlDown()){
 				group.clearGroup();
 			}			
@@ -385,7 +383,8 @@ public class Controller {
        	   	        	newColumn = finalColumn - moveColumn;
        	   	            newRow = finalRow - moveRow;
        	   	               		
-       	   	            StackPane splitPane = ((StackPane) getNode(board, newColumn, newRow));     	   	            
+       	   	            StackPane splitPane = ((StackPane) getNode(board, newColumn, newRow)); 
+       	   	            splitPane.getChildren().remove(multipleImage.getChildren().get(0));
        	   	            splitPane.getChildren().add(multipleImage.getChildren().get(0));      	
        	   	               		
                         overlap = true;
@@ -531,6 +530,18 @@ public class Controller {
 							
 					board = view.getGrid();	
 							
+					if(newPosX < 0){
+						newPosX = 1;
+					} else if(newPosX > (board.getColumn() - 1)){
+						newPosX = board.getColumn() - 2;
+					}
+					
+					if(newPosY < 0){
+						newPosY = 1;
+					} else if(newPosY > (board.getRow() - 1)){
+						newPosY = board.getRow() - 2;
+					}
+					
 	                StackPane groupMove = (StackPane) getNode(board, newPosX, newPosY);
 	                   	                    
 	                groupMove.getChildren().remove(node);                        			
@@ -559,7 +570,8 @@ public class Controller {
     	
     	Board copyGrid = view.getCopyGrid();
     	copyGrid.getChildren().clear();
-   	 	copyGrid.setId("floor");
+    	String floor = view.getGrid().getId();
+   	 	
    	 	
    	 	ArrayList<StackPane> items = new ArrayList<StackPane>();
         items.clear();
@@ -593,7 +605,7 @@ public class Controller {
             		System.out.println("Row: " + j);
             		System.out.println("Column: " + x);
             		copyGrid.add(items.get(count++), j, x);
-            		copyGrid.setId("copy");
+            		copyGrid.setId(floor);
             		}
             	}
     		}                                

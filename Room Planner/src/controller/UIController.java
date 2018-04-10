@@ -100,6 +100,11 @@ public class UIController{
 		view.getMarble().setSelected(false);
 		view.getWood().setSelected(false);
 		board.setId("stone");
+		
+		board.getChildren().forEach(i -> {
+			i.setStyle("-fx-border-color: white");
+		});
+		
 	}
 	
 	private void toggleWoodHandler(ActionEvent event){
@@ -108,6 +113,11 @@ public class UIController{
 		view.getMarble().setSelected(false);
 		view.getWood().setSelected(true);
 		board.setId("wood");
+		
+		board.getChildren().forEach(i -> {
+			i.setStyle("-fx-border-color: white");
+		});
+		
 	}
 	
 	private void toggleMarbleHandler(ActionEvent event){
@@ -116,6 +126,11 @@ public class UIController{
 		view.getMarble().setSelected(true);
 		view.getWood().setSelected(false);
 		board.setId("marble");
+		
+		board.getChildren().forEach(i -> {
+			i.setStyle("-fx-border-color: black");
+		});
+		
 	}
 	
     private void rotateBoard(ActionEvent event){

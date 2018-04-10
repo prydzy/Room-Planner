@@ -8,9 +8,11 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Slider;
 import javafx.scene.control.Toggle;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -26,15 +28,8 @@ public class BuildUI {
 	private Board board;
 	private GridPane floor;
 	private Board copyBoard = new Board();
-	private GridPane modifyBoard;
 	private TilePane imgBox = new TilePane();
     private ScrollPane scroll = new ScrollPane(imgBox);
-	private Label columnLabel = new Label("Columns:");
-	private Label rowLabel = new Label("Rows:");
-	private NumberTextField columnText = new NumberTextField();
-	private NumberTextField rowText = new NumberTextField();
-	private NumberTextField widthText = new NumberTextField();
-	private NumberTextField heightText = new NumberTextField();
 	private Button sofaBtn = new Button("Sofa");
 	private Button bedBtn = new Button("Bed");
 	private Button bookshelfBtn = new Button("Book Shelf");
@@ -53,9 +48,7 @@ public class BuildUI {
 	private Button copyBtn = new Button("Copy Selection");
 	private Button deleteBtn = new Button("Delete Selection");
 	private Button gridLines = new Button("Toggle Grid Lines");
-	private Button modifyGran = new Button("Modify Grid Granularity");
 	private Button rotateBtn = new Button("Rotate Selection");
-	private Button resizeBtn = new Button("Resize Item");
 	private Button saveButton = new Button("Save");
 	private Button loadButton = new Button("Load");
 	private Button sinkBtn = new Button("Sink");
@@ -84,6 +77,9 @@ public class BuildUI {
     private Pane misc = new Pane();
     private int btnOffset = 35;
     private ComboBox<String> furniture = new ComboBox<String>();  
+    private VBox granBox = new VBox();
+    private Slider granularity = new Slider();
+    private Label granLabel = new Label("Modify Granularity (Warning, Resets Board)");
     
     public BuildUI(){	
     	    	
@@ -93,21 +89,7 @@ public class BuildUI {
     } 
     
 	public void buildButtons(){		
-    	
-    	modifyBoard = new GridPane();
-        modifyBoard.add(columnLabel, 0, 0);
-        modifyBoard.add(columnText, 1, 0);
-        modifyBoard.add(rowLabel, 0, 1);
-        modifyBoard.add(rowText, 1, 1);
-        modifyBoard.setHgap(10);
-        modifyBoard.setVgap(5);    
-        
-        String columnString = Integer.toString(board.getColumn());
-        String rowString = Integer.toString(board.getRow());
-        
-        columnText.setText(columnString);
-        rowText.setText(rowString);
-        
+                  
         wood.setText("Wood");
         wood.setSelected(true);       
         stone.setText("Stone");     
@@ -149,11 +131,22 @@ public class BuildUI {
         
         for(int i = 0; i < misc.getChildren().size(); i++){
         	misc.getChildren().get(i).setLayoutY(i*btnOffset);
-        }
+        }              
+        
+        granularity.setMin(0);
+        granularity.setMax(5);
+        granularity.setMajorTickUnit(1);
+        granularity.setMinorTickCount(0);
+        granularity.setShowTickLabels(true);
+        granularity.setShowTickMarks(true);
+        granularity.setSnapToTicks(true);
+        
+        granBox.getChildren().addAll(granularity, granLabel);
+        granBox.setTranslateY(500);
         
         leftbuttons.getChildren().addAll(clearBtn, furniture, rooms);        
-        middleButtons.getChildren().addAll(rotateBtn, copyBtn, deleteBtn, widthText, heightText, resizeBtn);
-        rightButtons.getChildren().addAll(clearboardBtn, rotateboardBtn, gridLines, modifyBoard, modifyGran, wood, stone, marble, copyBoard, saveButtons);        
+        middleButtons.getChildren().addAll(rotateBtn, copyBtn, deleteBtn);
+        rightButtons.getChildren().addAll(clearboardBtn, rotateboardBtn, gridLines, wood, stone, marble, copyBoard, saveButtons, granBox);        
 
         rightButtons.setPadding(new Insets(5, 5, 5, 5));
         rightButtons.setSpacing(10);
@@ -184,8 +177,8 @@ public class BuildUI {
     	board = new Board();
     	floor = new GridPane();
     	        	
-    	board.setColumn(11);
-    	board.setRow(11); 	 
+    	board.setColumn(7);
+    	board.setRow(7); 	 
     	
     	int column = board.getColumn();
     	int row = board.getRow();
@@ -219,6 +212,10 @@ public class BuildUI {
     	return furniture;
     }
     
+    public Slider getSlider(){
+    	return granularity;
+    }
+    
     public Pane getBedroom(){
     	return bedroom;
     }
@@ -239,14 +236,6 @@ public class BuildUI {
     	return misc;
     }
     
-    public String getColumnText(){
-    	return columnText.getText();
-    }
-    
-    public String getRowText(){
-    	return rowText.getText();
-    }
-    
     public Toggle getStone(){
     	return stone;
     }
@@ -257,22 +246,6 @@ public class BuildUI {
     
     public Toggle getWood(){
     	return wood;
-    }
-    	
-    public NumberTextField getWidth(){
-    	return widthText;
-    }
-    	
-    public NumberTextField getHeight(){
-    	return heightText;
-    }
-    	
-    public void setWidth(String value){
-    	widthText.setText(value);
-    }
-    	
-    public void setHeight(String value){
-    	heightText.setText(value);
     }
     	
     public Board getCopyGrid(){
@@ -288,7 +261,7 @@ public class BuildUI {
     }
     	
     public void clearAll(){
-    	imgBox.getChildren().clear();
+    	imgBox.getChildren().clear();    	
     }
     	
     public void addChoiceBoxHandler(EventHandler<ActionEvent>handler){
@@ -386,6 +359,10 @@ public class BuildUI {
     public void addClearHandler(EventHandler<ActionEvent>handler){
     	clearBtn.setOnAction(handler);
     }   	 
+    
+    public void addSliderHandler(EventHandler<MouseEvent>handler){  	       	
+    	granularity.setOnMouseClicked(handler);  	
+    }
     	
     public void addDragOverHandler(EventHandler<DragEvent>handler){  		
     		
@@ -431,9 +408,6 @@ public class BuildUI {
     	gridLines.setOnAction(handler);
     }
     
-    public void addModifyGranularity(EventHandler<ActionEvent>handler){
-    	modifyGran.setOnAction(handler);
-    }
     
     public void addStoneHandler(EventHandler<ActionEvent> handler){
     	stone.setOnAction(handler);

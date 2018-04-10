@@ -97,8 +97,8 @@ public class Board extends GridPane {
 	public StackPane makePane(){
 		StackPane pane = new StackPane();
 		pane.setStyle("-fx-border-color: white");
-		pane.setPrefHeight(125);
-		pane.setPrefWidth(125);              
+		pane.setPrefHeight(150);
+		pane.setPrefWidth(150);              
 		pane.setPadding(new Insets(5, 5, 5, 5));
         return pane;
 	}
