@@ -1,5 +1,8 @@
 package controller;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javafx.event.ActionEvent;
@@ -82,6 +85,7 @@ public class Controller {
 		view.addPoolTableHandler(this::addPoolTable);
 		view.addRugHandler(this::addRug);
 		view.addSliderHandler(this::addSliderHandling);
+		view.addLoadHandler(this::loadFile);
 	}
 
 	private void addSliderHandling(MouseEvent event){
@@ -122,7 +126,7 @@ public class Controller {
 	
     private void addSofa(ActionEvent event){
     	Image sofa = new LocatedImage("file:sofa.png");
-    	addFurniture(sofa);   	    	
+    	addFurniture(sofa);   	
     }
        
     private void addSideBoard(ActionEvent event){
@@ -485,6 +489,12 @@ public class Controller {
 			parameters.setTransform(new Rotate(90, node.getFitHeight() / 2, node.getFitWidth() / 2));  			
 			Image snapshot = node.snapshot(parameters, null);   	
 			node.setImage(snapshot); 	
+					
+		//	int rotate = rotate + 90;
+									
+	//		String addRotation = Double.toString(node.getRotate());
+	//		System.out.println(addRotation);
+			
 			node.getStyleClass().add("highlight");
 						
 			if(group.groupSize() > 1){
@@ -627,4 +637,90 @@ public class Controller {
 		}				
     }	
 	
+    	private void filterArray(ArrayList<String> arr){
+    		ArrayList<String> imageStrings = new ArrayList<String>();
+    		
+    		for(String string : arr){
+    			if(string.equals("[]")){
+    				imageStrings.add(string);
+    			}
+    			else if(!string.equals("[]") && !string.contains("column") && !string.contains("row")){			
+    				String imagename = string.substring(string.lastIndexOf("id=") + 3, string.indexOf(","));
+    				imageStrings.add(imagename);
+    			} 
+    			else if(string.contains("column")){
+    				String column = string.substring(7);
+    				imageStrings.add(column);
+    			}
+    			else if(string.contains("row")){
+    				String row = string.substring(4);
+    				imageStrings.add(row);
+    			}
+    		}
+    		
+    		loadBoard(imageStrings);    		
+    	}
+    	
+    	private void loadFile(ActionEvent event){
+
+    		ArrayList<String> array = new ArrayList<String>();
+    		try(BufferedReader br = new BufferedReader(new FileReader("board.txt")))
+            {
+
+                String sCurrentLine;
+
+                while ((sCurrentLine = br.readLine()) != null) {
+                    array.add(sCurrentLine);
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }   		    		
+    		filterArray(array);
+    		
+    	}
+    	
+    	private void loadBoard(ArrayList<String> arr){
+    		
+    		resetBoard();
+    		
+    		int column = Integer.parseInt(arr.get(arr.size() - 2));
+    		int row = Integer.parseInt(arr.get(arr.size() - 1));
+    		
+    		arr.remove(arr.size() - 1);
+    		arr.remove(arr.size() - 1);
+    		    		
+    		board = view.getGrid();
+    		
+    		board.createBoard(board, column, row);
+    		
+    		int index = 0;
+    		
+    		for(int x = 0; x < column; x++){
+    			for(int y = 0; y < row; y++){
+    				StackPane pane = (StackPane) getNode(board, x, y); 
+    				String temp = arr.get(index);
+    				
+    				if(temp.equals("[]")){
+    					
+    				}
+    				else{
+    					Image loadImage = new Image(temp);
+    					ImageView loadImageView = new ImageView();
+    					loadImageView.setImage(loadImage);
+    					pallet.makeImageView(loadImageView);
+    		        	selectImage(loadImageView);
+    		        	hoverImage(loadImageView);
+    		        	dragdetected.dragImage(loadImageView);
+    					pane.getChildren().add(loadImageView);
+    				}
+    				
+    				index++;
+    				
+    				view.addDragOverHandler(this::addDragOverHandling);
+    				view.addDragDroppedHandler(this::addDragDroppedHandling);
+    		}
+    	}	
+    }
+    	
 }

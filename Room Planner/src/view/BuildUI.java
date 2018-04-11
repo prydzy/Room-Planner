@@ -425,4 +425,8 @@ public class BuildUI {
     	saveButton.setOnAction(handler);
     }
     
+    public void addLoadHandler(EventHandler<ActionEvent> handler){
+    	loadButton.setOnAction(handler);
+    }
+    
 }

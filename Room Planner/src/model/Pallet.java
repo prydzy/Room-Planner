@@ -52,6 +52,7 @@ public class Pallet {
     	image.setPreserveRatio(true);
     	image.setFitHeight(100);
     	image.setFitWidth(100);
+    	image.setId(image.getImage().impl_getUrl());
     	return image;
     }
     

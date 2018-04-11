@@ -1,5 +1,9 @@
 package controller;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -151,6 +155,7 @@ public class UIController{
 		});	
 	}
 	
+	
 	private void createFile(String file, ArrayList<String> arrData)
             throws IOException {
         FileWriter writer = new FileWriter(file + ".txt");
@@ -161,13 +166,23 @@ public class UIController{
             if(i < size-1)
                 writer.write("\n");
         }
+        
+        writer.write("\n");
+        
+        String column = "column=" + Integer.toString(board.getColumn());       
+        String row = "row=" + Integer.toString(board.getRow());
+        
+        writer.write(column);
+        writer.write("\n");
+        writer.write(row);
+        
         writer.close();
     }
 	
 	private void saveBoardHandling(ActionEvent event) throws IOException{
 		board = view.getGrid();
 		ArrayList<String> save = saveBoard();
-		createFile("BoardString", save);
+		createFile("board", save);
 	}
 	
 	private ArrayList<String> saveBoard(){
@@ -180,12 +195,8 @@ public class UIController{
 		panes = getAllNodes(board);
 		
 		panes.forEach(i -> {
-				images.add(i.getChildren().toString());
+			images.add(i.getChildren().toString());
 		});
-		
-		System.out.println("Images: " + images);
-		System.out.println("Panes: " + panes);
-
 
 		return images;
 		
