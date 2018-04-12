@@ -2,6 +2,7 @@ package controller;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -43,7 +44,7 @@ public class Controller {
     private ImageView draggingImage;  
 	private Integer[] bCoords = new Integer[2];
 	private Integer[] aCoords = new Integer[2];
-
+	
 	public Controller(BuildUI view, Board board, Pallet pallet, Group group){
 		this.view = view;
 		this.board = board;
@@ -86,6 +87,13 @@ public class Controller {
 		view.addRugHandler(this::addRug);
 		view.addSliderHandler(this::addSliderHandling);
 		view.addLoadHandler(this::loadFile);
+		view.addSaveHandler(arg0 -> {
+			try {
+				saveBoardHandling(arg0);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		});
 	}
 
 	private void addSliderHandling(MouseEvent event){
@@ -392,8 +400,7 @@ public class Controller {
        	   	        index++;  
        	        }
             }
-		}
-			  			
+		}	
 			  				
        	for(ImageView image : group.getGroup()){        
        		               		
@@ -465,7 +472,21 @@ public class Controller {
 			}
 		}
 	
+	private void rotateImage(ImageView node){
+		node.setPreserveRatio(true);   					    
+	    node.getStyleClass().remove("highlight");
+		System.out.println("rotating image");
+		SnapshotParameters parameters = new SnapshotParameters();
+		parameters.setFill(Color.TRANSPARENT);
+		parameters.setTransform(new Rotate(90, node.getFitHeight() / 2, node.getFitWidth() / 2));  			
+		Image snapshot = node.snapshot(parameters, null);   	
+		node.setImage(snapshot); 				
+		node.getStyleClass().add("highlight");
+	}
+	
 	private void addKeyHandling(ActionEvent event){
+		
+		board = view.getGrid();	
 														
 		ArrayList<Integer> xCoords = new ArrayList<Integer>();
 		ArrayList<Integer> yCoords = new ArrayList<Integer>();
@@ -484,43 +505,11 @@ public class Controller {
 			Image snapshot = node.snapshot(parameters, null);   	
 			node.setImage(snapshot); 				
 			node.getStyleClass().add("highlight");
-
-			if(group.groupSize() > 0){
-								
-		//		board.setImage(node);
-		//		board.setImageRotate(90);
-				
-				int rotate = board.getImageRotate();
-				rotate = rotate + 90;				
-				
-				if(rotate >= 360){
-					rotate = 0;
-				}
-				System.out.println("BANTER" + board.getImageRotate());
-				node.getRotate();
-											
-				String sRotate = Integer.toString(rotate);
-								
-				String oldId = node.getId();
-				String newId = node.getId().concat("|" + sRotate + "|");					
-				String removeString = "";
-				
-				if(oldId.contains("|")){
-					removeString = oldId.substring(oldId.indexOf("|"), oldId.lastIndexOf("|") + 1);		
-					newId = newId.replace(removeString, "");
-				}
-				
-				node.setId(newId);
-				
-				System.out.println(node.getId());
-			}
-			
 						
 			if(group.groupSize() > 1){
 							    							
 				int imageRow = GridPane.getRowIndex(node.getParent());
-				int imageColumn = GridPane.getColumnIndex(node.getParent());
-							
+				int imageColumn = GridPane.getColumnIndex(node.getParent());					
 				xCoords.add(imageColumn);
 				yCoords.add(imageRow);    							
 							    							
@@ -532,8 +521,7 @@ public class Controller {
 			if(group.groupSize() > 1){
 					    					        							     				        		
     			int xCenter = (xCoords.size() + 1) / 2;
-    			int yCenter = (yCoords.size() + 1) / 2;
-    				
+    			int yCenter = (yCoords.size() + 1) / 2;			
         		centerX = xCoords.get(xCenter);
         		centerY = yCoords.get(yCenter); 		
     							     				       				   	
@@ -547,7 +535,7 @@ public class Controller {
 					
 					int imageRow = GridPane.getRowIndex(node.getParent());
 					int imageColumn = GridPane.getColumnIndex(node.getParent());
-
+					
 					int dx = centerX - imageColumn;
 					int dy = centerY - imageRow;
 							
@@ -556,8 +544,6 @@ public class Controller {
 							
 					newPosX = centerX + dy;
 					newPosY = centerY - dx;			
-							
-					board = view.getGrid();	
 							
 					if(newPosX < 0){
 						newPosX = 1;
@@ -592,7 +578,7 @@ public class Controller {
     private void resetBoard(){
     	System.out.println("Board Cleared");
     	board = view.getGrid();
-    	board.getChildren().clear();
+    	board.deleteBoard();
     }
     
     private void copyItem(ActionEvent event){
@@ -666,19 +652,11 @@ public class Controller {
     				imageStrings.add(string);
     				imageRotations.add(0);
     			}
-    			else if(!string.equals("[]") && !string.contains("column") && !string.contains("row") && !string.contains("|")){			
+    			else if(!string.equals("[]") && !string.contains("column") && !string.contains("row")){			
     				String imagename = string.substring(string.lastIndexOf("id=") + 3, string.indexOf(","));
     				imageStrings.add(imagename);
     				System.out.println(imagename);
     				imageRotations.add(0);
-    			} 
-    			else if(!string.equals("[]") && !string.contains("column") && !string.contains("row") && string.contains("|")){			
-    				String imagename = string.substring(string.lastIndexOf("id=") + 3, string.indexOf("|"));
-    				imageStrings.add(imagename);
-    				String rotation = string.substring(string.indexOf("|") + 1, string.lastIndexOf("|"));
-    				int irotation = Integer.parseInt(rotation);
-    				imageRotations.add(irotation);
-    		//		System.out.println(imagename);
     			} 
     			else if(string.contains("column")){
     				String column = string.substring(7);
@@ -756,6 +734,66 @@ public class Controller {
     				view.addDragDroppedHandler(this::addDragDroppedHandling);
     		}
     	}	
+    		
     }
+
+    	private void createFile(String file, ArrayList<String> arrData)
+                throws IOException {
+            FileWriter writer = new FileWriter(file + ".txt");
+            int size = arrData.size();
+            for (int i=0;i<size;i++) {
+                String str = arrData.get(i).toString();
+                writer.write(str);
+                if(i < size-1)
+                    writer.write("\n");
+            }
+            
+            writer.write("\n");
+            
+            String column = "column=" + Integer.toString(board.getColumn());       
+            String row = "row=" + Integer.toString(board.getRow());
+            
+            writer.write(column);
+            writer.write("\n");
+            writer.write(row);
+            
+            writer.close();
+        }
     	
+    	private void saveBoardHandling(ActionEvent event) throws IOException{
+    		board = view.getGrid();
+    		ArrayList<String> save = saveBoard();
+    		createFile("board", save);
+    	}
+    	
+    	private ArrayList<String> saveBoard(){
+    		
+    		board = view.getGrid();
+    		
+    		ArrayList<StackPane> panes = new ArrayList<>();
+    		ArrayList<String> images = new ArrayList<>();
+    		
+    		panes = getAllNodes(board);
+    		
+    		panes.forEach(i -> {
+    			images.add(i.getChildren().toString());
+    		});
+
+    		System.out.println(images);
+    		
+    		return images;
+    		
+    	}
+    	
+    	private ArrayList<StackPane> getAllNodes(GridPane board){
+    		
+    		ArrayList<StackPane> nodes = new ArrayList<>();  		
+    		StackPane pane = new StackPane();
+    		
+    		for(Node node : board.getChildren()) {
+    			pane = (StackPane) node;
+    			nodes.add(pane);
+    		}   		
+    		return nodes;  		
+    	}
 }

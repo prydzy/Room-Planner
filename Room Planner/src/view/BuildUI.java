@@ -177,6 +177,8 @@ public class BuildUI {
     	board = new Board();
     	floor = new GridPane();
     	        	
+    	board.setBoard(floor); 
+    	
     	board.setColumn(7);
     	board.setRow(7); 	 
     	
@@ -187,10 +189,7 @@ public class BuildUI {
     	board.setMaxWidth(950);
     	board.setMaxHeight(950);
     	board.setMinWidth(950);
-    	board.setMinHeight(950);
-    	
-    	board.setFloor(board);           	
-    	board.setBoard(floor);   
+    	board.setMinHeight(950);  
     	        	        	
 	}
 

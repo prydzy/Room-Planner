@@ -41,13 +41,6 @@ public class UIController{
 		view.addMarbleListener(this::toggleMarbleHandler);
 		view.addRotateBoardHandler(this::rotateBoard);
 		view.addToggleGridHandler(this::toggleGridLines);
-		view.addSaveHandler(arg0 -> {
-			try {
-				saveBoardHandling(arg0);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		});
 	}
 	
 	private void addChoiceBoxHandling(ActionEvent event){
@@ -153,70 +146,6 @@ public class UIController{
 				i.setStyle("");
 			}
 		});	
-	}
-	
-	
-	private void createFile(String file, ArrayList<String> arrData)
-            throws IOException {
-        FileWriter writer = new FileWriter(file + ".txt");
-        int size = arrData.size();
-        for (int i=0;i<size;i++) {
-            String str = arrData.get(i).toString();
-            writer.write(str);
-            if(i < size-1)
-                writer.write("\n");
-        }
-        
-        writer.write("\n");
-        
-        String column = "column=" + Integer.toString(board.getColumn());       
-        String row = "row=" + Integer.toString(board.getRow());
-        
-        writer.write(column);
-        writer.write("\n");
-        writer.write(row);
-        
-        writer.close();
-    }
-	
-	private void saveBoardHandling(ActionEvent event) throws IOException{
-		board = view.getGrid();
-		ArrayList<String> save = saveBoard();
-		createFile("board", save);
-	}
-	
-	private ArrayList<String> saveBoard(){
-		
-		board = view.getGrid();
-		
-		ArrayList<StackPane> panes = new ArrayList<>();
-		ArrayList<String> images = new ArrayList<>();
-		
-		panes = getAllNodes(board);
-		
-		panes.forEach(i -> {
-			images.add(i.getChildren().toString());
-		});
-
-		System.out.println(images);
-		
-		return images;
-		
-	}
-	
-	public ArrayList<StackPane> getAllNodes(GridPane board){
-		
-		ArrayList<StackPane> nodes = new ArrayList<>();
-		
-		StackPane pane = new StackPane();
-		
-		for(Node node : board.getChildren()) {
-			pane = (StackPane) node;
-			nodes.add(pane);
-		}
-		
-		return nodes;
-		
 	}
 	
 }
