@@ -472,18 +472,6 @@ public class Controller {
 			}
 		}
 	
-	private void rotateImage(ImageView node){
-		node.setPreserveRatio(true);   					    
-	    node.getStyleClass().remove("highlight");
-		System.out.println("rotating image");
-		SnapshotParameters parameters = new SnapshotParameters();
-		parameters.setFill(Color.TRANSPARENT);
-		parameters.setTransform(new Rotate(90, node.getFitHeight() / 2, node.getFitWidth() / 2));  			
-		Image snapshot = node.snapshot(parameters, null);   	
-		node.setImage(snapshot); 				
-		node.getStyleClass().add("highlight");
-	}
-	
 	private void addKeyHandling(ActionEvent event){
 		
 		board = view.getGrid();	

@@ -47,7 +47,8 @@ public class Pallet {
 		return AllImages.size();
 	}
     
-    public ImageView makeImageView(ImageView image){
+    @SuppressWarnings("deprecation")
+	public ImageView makeImageView(ImageView image){
     	image.setSmooth(true);
     	image.setPreserveRatio(true);
     	image.setFitHeight(100);

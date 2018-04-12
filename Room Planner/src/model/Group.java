@@ -41,7 +41,7 @@ public class Group {
 
 	public boolean groupContains(ImageView node){
 		return group.contains(node);
-    	}
+    }
 
 	public int groupSize(){
 		return group.size();

@@ -83,22 +83,17 @@ public class BuildUI {
     
     public BuildUI(){	
     	    	
-    	buildFloor();  	
+    	buildFloor(); 
+    	buildRooms();
     	buildPallet();
     	buildButtons();
     } 
     
-	public void buildButtons(){		
-                  
-        wood.setText("Wood");
-        wood.setSelected(true);       
-        stone.setText("Stone");     
-        marble.setText("Marble");
-                		
-        saveButtons.getChildren().addAll(saveButton, loadButton);                 
+    public void buildRooms(){
+    	
         furniture.getItems().addAll("Furniture Selection","Bedroom", "Living Room", "Bathroom", "Kitchen", "Misc");
         furniture.getSelectionModel().selectFirst();
-        
+    	
         bathroom.getChildren().addAll(sideunitBtn, bathroomsinkBtn, bathBtn, showerBtn);
         bathroom.setVisible(false);
         kitchen.getChildren().addAll(sinkBtn, ovenBtn, worktopBtn, fridgeBtn); 
@@ -112,7 +107,16 @@ public class BuildUI {
         
         rooms.getChildren().addAll(bedroom, kitchen, bathroom, livingroom, misc);       
         rooms.setPickOnBounds(false);
-                       
+        
+    }
+    
+	public void buildButtons(){		
+                  
+        wood.setText("Wood");
+        wood.setSelected(true);       
+        stone.setText("Stone");     
+        marble.setText("Marble");              	                 
+        
         for(int i = 0; i < bedroom.getChildren().size(); i++){
         	bedroom.getChildren().get(i).setLayoutY(i*btnOffset);
         }
@@ -139,21 +143,7 @@ public class BuildUI {
         granularity.setMinorTickCount(0);
         granularity.setShowTickLabels(true);
         granularity.setShowTickMarks(true);
-        granularity.setSnapToTicks(true);
-        
-        granBox.getChildren().addAll(granularity, granLabel);
-        granBox.setTranslateY(500);
-        
-        leftbuttons.getChildren().addAll(clearBtn, furniture, rooms);        
-        middleButtons.getChildren().addAll(rotateBtn, copyBtn, deleteBtn);
-        rightButtons.getChildren().addAll(clearboardBtn, rotateboardBtn, gridLines, wood, stone, marble, copyBoard, saveButtons, granBox);        
-
-        rightButtons.setPadding(new Insets(5, 5, 5, 5));
-        rightButtons.setSpacing(10);
-        leftbuttons.setPadding(new Insets(5, 5, 5, 5));
-        leftbuttons.setSpacing(10);
-        middleButtons.setPadding(new Insets(5, 5, 5, 5));
-        middleButtons.setSpacing(10);
+        granularity.setSnapToTicks(true);         
         
 	}
 
@@ -194,8 +184,20 @@ public class BuildUI {
 	}
 
     public HBox buildView(){  	
-    	    	    	    	
+    	    	    	    
+    	saveButtons.getChildren().addAll(saveButton, loadButton);
+        granBox.getChildren().addAll(granularity, granLabel);     
+        leftbuttons.getChildren().addAll(clearBtn, furniture, rooms);        
+        middleButtons.getChildren().addAll(rotateBtn, copyBtn, deleteBtn);
+        rightButtons.getChildren().addAll(clearboardBtn, rotateboardBtn, gridLines, wood, stone, marble, saveButtons, granBox, copyBoard);  
     	box.getChildren().addAll(leftbuttons, scroll, middleButtons, board, rightButtons);
+    	
+        rightButtons.setPadding(new Insets(5, 5, 5, 5));
+        rightButtons.setSpacing(10);
+        leftbuttons.setPadding(new Insets(5, 5, 5, 5));
+        leftbuttons.setSpacing(10);
+        middleButtons.setPadding(new Insets(5, 5, 5, 5));
+        middleButtons.setSpacing(10);
 
     	box.setStyle("-fx-padding: 10;"
                 + "-fx-border-style: solid inside;"
@@ -427,5 +429,4 @@ public class BuildUI {
     public void addLoadHandler(EventHandler<ActionEvent> handler){
     	loadButton.setOnAction(handler);
     }
-    
 }
