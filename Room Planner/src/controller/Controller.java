@@ -271,13 +271,7 @@ public class Controller {
 	private void selectImage(ImageView image){
 		
 		image.setOnMousePressed(i -> {
-			
-			double imagefWidth = image.getFitWidth();
-			double imagefHeight = image.getFitHeight();
-			
-			double imageWidth = image.getImage().getWidth();
-			double imageHeight = image.getImage().getHeight();
-									        			
+												        			
 			if(!i.isShiftDown() && !i.isControlDown()){
 				group.clearGroup();
 			}			
@@ -480,7 +474,7 @@ public class Controller {
 		int centerY = 0;
 			
 		for(ImageView node : group.getGroup()) {   				   					
-					
+			
 			node.setPreserveRatio(true);   					    
 		    node.getStyleClass().remove("highlight");
 			System.out.println("rotating image");
@@ -488,14 +482,39 @@ public class Controller {
 			parameters.setFill(Color.TRANSPARENT);
 			parameters.setTransform(new Rotate(90, node.getFitHeight() / 2, node.getFitWidth() / 2));  			
 			Image snapshot = node.snapshot(parameters, null);   	
-			node.setImage(snapshot); 	
-					
-		//	int rotate = rotate + 90;
-									
-	//		String addRotation = Double.toString(node.getRotate());
-	//		System.out.println(addRotation);
-			
+			node.setImage(snapshot); 				
 			node.getStyleClass().add("highlight");
+
+			if(group.groupSize() > 0){
+								
+		//		board.setImage(node);
+		//		board.setImageRotate(90);
+				
+				int rotate = board.getImageRotate();
+				rotate = rotate + 90;				
+				
+				if(rotate >= 360){
+					rotate = 0;
+				}
+				System.out.println("BANTER" + board.getImageRotate());
+				node.getRotate();
+											
+				String sRotate = Integer.toString(rotate);
+								
+				String oldId = node.getId();
+				String newId = node.getId().concat("|" + sRotate + "|");					
+				String removeString = "";
+				
+				if(oldId.contains("|")){
+					removeString = oldId.substring(oldId.indexOf("|"), oldId.lastIndexOf("|") + 1);		
+					newId = newId.replace(removeString, "");
+				}
+				
+				node.setId(newId);
+				
+				System.out.println(node.getId());
+			}
+			
 						
 			if(group.groupSize() > 1){
 							    							
@@ -638,15 +657,28 @@ public class Controller {
     }	
 	
     	private void filterArray(ArrayList<String> arr){
+    		
     		ArrayList<String> imageStrings = new ArrayList<String>();
+    		ArrayList<Integer> imageRotations = new ArrayList<Integer>();
     		
     		for(String string : arr){
     			if(string.equals("[]")){
     				imageStrings.add(string);
+    				imageRotations.add(0);
     			}
-    			else if(!string.equals("[]") && !string.contains("column") && !string.contains("row")){			
+    			else if(!string.equals("[]") && !string.contains("column") && !string.contains("row") && !string.contains("|")){			
     				String imagename = string.substring(string.lastIndexOf("id=") + 3, string.indexOf(","));
     				imageStrings.add(imagename);
+    				System.out.println(imagename);
+    				imageRotations.add(0);
+    			} 
+    			else if(!string.equals("[]") && !string.contains("column") && !string.contains("row") && string.contains("|")){			
+    				String imagename = string.substring(string.lastIndexOf("id=") + 3, string.indexOf("|"));
+    				imageStrings.add(imagename);
+    				String rotation = string.substring(string.indexOf("|") + 1, string.lastIndexOf("|"));
+    				int irotation = Integer.parseInt(rotation);
+    				imageRotations.add(irotation);
+    		//		System.out.println(imagename);
     			} 
     			else if(string.contains("column")){
     				String column = string.substring(7);
@@ -657,8 +689,11 @@ public class Controller {
     				imageStrings.add(row);
     			}
     		}
+    		    		
+    		System.out.println(imageStrings);
+    		System.out.println(imageRotations);
     		
-    		loadBoard(imageStrings);    		
+    		loadBoard(imageStrings, imageRotations);    		
     	}
     	
     	private void loadFile(ActionEvent event){
@@ -680,7 +715,7 @@ public class Controller {
     		
     	}
     	
-    	private void loadBoard(ArrayList<String> arr){
+    	private void loadBoard(ArrayList<String> arr, ArrayList<Integer> ints){
     		
     		resetBoard();
     		
@@ -699,19 +734,19 @@ public class Controller {
     		for(int x = 0; x < column; x++){
     			for(int y = 0; y < row; y++){
     				StackPane pane = (StackPane) getNode(board, x, y); 
-    				String temp = arr.get(index);
-    				
-    				if(temp.equals("[]")){
-    					
+    				String sTemp = arr.get(index);
+    				Integer iTemp = ints.get(index);
+    				if(sTemp.equals("[]")){    					
     				}
     				else{
-    					Image loadImage = new Image(temp);
+    					Image loadImage = new Image(sTemp);
     					ImageView loadImageView = new ImageView();
     					loadImageView.setImage(loadImage);
     					pallet.makeImageView(loadImageView);
     		        	selectImage(loadImageView);
     		        	hoverImage(loadImageView);
     		        	dragdetected.dragImage(loadImageView);
+    		        	loadImageView.setRotate(iTemp);
     					pane.getChildren().add(loadImageView);
     				}
     				

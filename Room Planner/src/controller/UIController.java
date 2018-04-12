@@ -198,6 +198,8 @@ public class UIController{
 			images.add(i.getChildren().toString());
 		});
 
+		System.out.println(images);
+		
 		return images;
 		
 	}

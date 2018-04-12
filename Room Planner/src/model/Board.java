@@ -2,6 +2,7 @@ package model;
 
 import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 
@@ -12,12 +13,34 @@ public class Board extends GridPane {
 	private StackPane pane;
 	private int column;
 	private int row;
-
+	private ImageView image;
+	private int rotate;
+	
 	public Board(){
 	}
 	
+	public ImageView getImage() {
+		return image;
+	}
+
+	public void setImage(ImageView image) {
+		this.image = image;
+	}
+	
+	public void setImageRotate(ImageView image, int angle){
+		this.image = image; 
+	}
+
 	public Board getFloor(){
 		return floor;
+	}
+	
+	public void setImageRotate(int rotate){
+		this.rotate = rotate;
+	}
+	
+	public int getImageRotate(){
+		return rotate;
 	}
 	
 	public void setFloor(Board floor){
@@ -67,7 +90,7 @@ public class Board extends GridPane {
 	public void setRotate(int angle) {
 		board.setRotate(angle);
 	}
-
+	
 	public void deleteBoard() {
 		board.getChildren().clear();
 	}
