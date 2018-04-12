@@ -15,7 +15,6 @@ public class AppLoader extends Application {
 
     private BuildUI view;
     private Scene scene;
-    private UIController uicontroller;
 
     @Override
     public void init() {

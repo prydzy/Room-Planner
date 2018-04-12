@@ -388,7 +388,7 @@ public class Controller {
        	}      	  	
     }
     
-	private Node getNode(Board board, int col, int row){
+	public Node getNode(GridPane board, int col, int row){
 		
 		for(Node node : board.getChildren()) {
 			if(GridPane.getColumnIndex(node) == col && GridPane.getRowIndex(node) == row) {
@@ -623,8 +623,8 @@ public class Controller {
 		
 		if(clear == true){
 			group.clearGroup();;
-		}				
-    }	
+			}				
+    	}	
 	
     	private void filterArray(ArrayList<String> arr){
     		
@@ -766,7 +766,7 @@ public class Controller {
     		return images;   		
     	}
     	
-    	private ArrayList<StackPane> getAllNodes(GridPane board){
+    	public ArrayList<StackPane> getAllNodes(GridPane board){
     		
     		ArrayList<StackPane> nodes = new ArrayList<>();  		
     		StackPane pane = new StackPane();
