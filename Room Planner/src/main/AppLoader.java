@@ -15,6 +15,7 @@ public class AppLoader extends Application {
 
     private BuildUI view;
     private Scene scene;
+    private UIController uicontroller;
 
     @Override
     public void init() {
@@ -25,7 +26,7 @@ public class AppLoader extends Application {
         Board board = new Board();         
         
         new Controller(view, board, pallet, group);
-        new UIController(view, board, pallet, group);
+        new UIController(view, board);
                
     }
 

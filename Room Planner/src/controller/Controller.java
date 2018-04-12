@@ -95,42 +95,6 @@ public class Controller {
 			}
 		});
 	}
-
-	private void addSliderHandling(MouseEvent event){
-		board = view.getGrid();
-		
-		int newColumn = 0;
-		int newRow = 0;
-		
-		int count = 0;
-		count = (int) view.getSlider().getValue();			
-		
-		switch (count) {
-			default:newColumn = 7; 
-					newRow = 7;
-					break;
-			case 1: newColumn = 8; 
-					newRow = 8;
-					break;
-			case 2: newColumn = 9; 
-					newRow = 9;
-					break;
-			case 3: newColumn = 10; 
-					newRow = 10;
-					break;
-			case 4: newColumn = 11; 
-					newRow = 11;
-					break;		
-			case 5: newColumn = 12; 
-					newRow = 12;
-					break;
-		}
-		
-		resetBoard();
-		board.createBoard(board, newColumn, newRow);	
-		view.addDragOverHandler(this::addDragOverHandling);
-		view.addDragDroppedHandler(this::addDragDroppedHandling);
-	}
 	
     private void addSofa(ActionEvent event){
     	Image sofa = new LocatedImage("file:sofa.png");
@@ -260,8 +224,10 @@ public class Controller {
         	hoverImage(images[j]);
         	dragdetected.dragImage(images[j]);
         }     
+        
         pallet.clear();
-		return images;      
+		return images;     
+		
     }
     
     private void clearPallet(ActionEvent event){
@@ -275,7 +241,6 @@ public class Controller {
 		});
 	}
 	    
-	
 	private void selectImage(ImageView image){
 		
 		image.setOnMousePressed(i -> {
@@ -285,15 +250,15 @@ public class Controller {
 			}			
 			if(group.getGroup().isEmpty()){
 				group.addItem(image);
-				System.out.print("Adding Selection\n");
+				System.out.print("Adding Item\n");
 			}
 			else if (i.isShiftDown()){
 				group.addItem(image);
-				System.out.print("Adding Selection\n");
+				System.out.print("Adding Item\n");
 			} 
 			else if (i.isControlDown() && group.groupContains(image)) {
 				group.removeItem(image);
-				System.out.print("Removing Selection\n");
+				System.out.print("Removing Item\n");
 			}   			
 			
 			group.groupLog();
@@ -304,9 +269,9 @@ public class Controller {
 		    		
 	}	
 	
-    public class DragDetected {     	        	
+    private class DragDetected {     	        	
         
-    	public void dragImage(final ImageView image){
+    	private void dragImage(final ImageView image){
     		image.setOnDragDetected(onDragDetectedEventHandler);
     	}
     	       	
@@ -328,8 +293,7 @@ public class Controller {
                 	bCoords[0] = beforeColumn;
                 	bCoords[1] = beforeRow;
                 	                	
-    			}   
-   			     			        			     			            		
+    			}   	     			        			     			            		
     		}
     	};     	
     }   
@@ -421,8 +385,7 @@ public class Controller {
                   		                	
                	}          		
        		}
-       	}     
-    	  	
+       	}      	  	
     }
     
 	private Node getNode(Board board, int col, int row){
@@ -432,9 +395,7 @@ public class Controller {
 				return node;
 			}
 		}
-
 		return null;
-
 	}
 	
 	private void addScrollHandling(ScrollEvent event) {
@@ -550,8 +511,7 @@ public class Controller {
 	                groupMove.getChildren().remove(node);                        			
 	                groupMove.getChildren().add(node);   											    										
 													
-				}
-					
+				}				
 			} 	  		
 		}	    
 	
@@ -568,6 +528,42 @@ public class Controller {
     	board = view.getGrid();
     	board.deleteBoard();
     }
+    
+	private void addSliderHandling(MouseEvent event){
+		board = view.getGrid();
+		
+		int newColumn = 0;
+		int newRow = 0;
+		
+		int count = 0;
+		count = (int) view.getSlider().getValue();			
+		
+		switch (count) {
+			default:newColumn = 7; 
+					newRow = 7;
+					break;
+			case 1: newColumn = 8; 
+					newRow = 8;
+					break;
+			case 2: newColumn = 9; 
+					newRow = 9;
+					break;
+			case 3: newColumn = 10; 
+					newRow = 10;
+					break;
+			case 4: newColumn = 11; 
+					newRow = 11;
+					break;		
+			case 5: newColumn = 12; 
+					newRow = 12;
+					break;
+		}
+		
+		resetBoard();
+		board.createBoard(board, newColumn, newRow);	
+		view.addDragOverHandler(this::addDragOverHandling);
+		view.addDragDroppedHandler(this::addDragDroppedHandling);
+	}
     
     private void copyItem(ActionEvent event){
     	
@@ -677,8 +673,7 @@ public class Controller {
             } catch (IOException e) {
                 e.printStackTrace();
             }   		    		
-    		filterArray(array);
-    		
+    		filterArray(array);  		
     	}
     	
     	private void loadBoard(ArrayList<String> arr, ArrayList<Integer> ints){
@@ -721,8 +716,7 @@ public class Controller {
     				view.addDragOverHandler(this::addDragOverHandling);
     				view.addDragDroppedHandler(this::addDragDroppedHandling);
     		}
-    	}	
-    		
+    	}	   		
     }
 
     	private void createFile(String file, ArrayList<String> arrData)
@@ -769,8 +763,7 @@ public class Controller {
 
     		System.out.println(images);
     		
-    		return images;
-    		
+    		return images;   		
     	}
     	
     	private ArrayList<StackPane> getAllNodes(GridPane board){

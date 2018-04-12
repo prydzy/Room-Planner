@@ -1,36 +1,17 @@
 package controller;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-
 import javafx.event.ActionEvent;
-import javafx.scene.Node;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
 import model.Board;
-import model.Group;
-import model.Pallet;
 import view.BuildUI;
 
 public class UIController{
 		
 	private BuildUI view;
-	private Pallet pallet;
-	private ImageView[] images;
 	private Board board;
-	private Group group;
 	
-	public UIController(BuildUI view, Board board, Pallet pallet, Group group){
+	public UIController(BuildUI view, Board board){
 		this.view = view;
 		this.board = board;
-		this.pallet = pallet;
-		this.group = group;
 		this.attachEventHandler();
 	}
 
@@ -92,6 +73,7 @@ public class UIController{
 	}
 	
 	private void toggleStoneHandler(ActionEvent event){
+		
 		board = view.getGrid();
 		view.getStone().setSelected(true);
 		view.getMarble().setSelected(false);

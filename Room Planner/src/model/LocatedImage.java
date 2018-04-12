@@ -3,6 +3,7 @@ package model;
 import javafx.scene.image.Image;
 
 public class LocatedImage extends Image {
+	
     private final String url;
 
     public LocatedImage(String url) {
@@ -13,4 +14,5 @@ public class LocatedImage extends Image {
     public String getURL() {
         return url;
     }
+    
 }
