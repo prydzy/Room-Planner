@@ -44,6 +44,11 @@ public class Controller {
     private ImageView draggingImage;  
 	private Integer[] bCoords = new Integer[2];
 	private Integer[] aCoords = new Integer[2];
+	private Integer[] mCoords = new Integer[2];
+	private Integer[] fCoords = new Integer[2];
+	private Integer[] nCoords = new Integer[2];
+	private Integer[] a2Coords = new Integer[2];
+	private Integer[] newCoords = new Integer[2];
 	
 	public Controller(BuildUI view, Board board, Pallet pallet, Group group){
 		this.view = view;
@@ -63,7 +68,7 @@ public class Controller {
 		view.addDragOverHandler(this::addDragOverHandling);
 		view.addDragDroppedHandler(this::addDragDroppedHandling);
 		view.addScrollHandler(this::addScrollHandling);
-		view.addRotateHandler(this::addKeyHandling);
+		view.addRotateHandler(this::addRotationHandling);
 		view.addResetHandler(this::clearBoardHandling);
 		view.addCopyHandler(this::copyItem);
 		view.addDeleteHandler(this::deleteItem);
@@ -87,6 +92,7 @@ public class Controller {
 		view.addRugHandler(this::addRug);
 		view.addSliderHandler(this::addSliderHandling);
 		view.addLoadHandler(this::loadFile);
+		view.addRotateBoardHandler(this::rotateBoard);
 		view.addSaveHandler(arg0 -> {
 			try {
 				saveBoardHandling(arg0);
@@ -217,6 +223,7 @@ public class Controller {
     	
     	System.out.println("Pallet Updated");
         images = new ImageView[pallet.size()];
+        
         for (int j = 0; j < images.length; j++) {
         	images[j] = new ImageView(pallet.getAllImages().get(j));
         	pallet.makeImageView(images[j]);
@@ -269,7 +276,7 @@ public class Controller {
 		    		
 	}	
 	
-    private class DragDetected {     	        	
+    public class DragDetected {     	        	
         
     	private void dragImage(final ImageView image){
     		image.setOnDragDetected(onDragDetectedEventHandler);
@@ -286,16 +293,13 @@ public class Controller {
     			dImage.setContent(cc); 
     			draggingImage = image;
     			
-    			if(image.getParent() instanceof StackPane){
-    				
+    			if(image.getParent() instanceof StackPane){				
     				int beforeColumn = GridPane.getColumnIndex(image.getParent());
-    	       		int beforeRow = GridPane.getRowIndex(image.getParent());     
-                	bCoords[0] = beforeColumn;
-                	bCoords[1] = beforeRow;
-                	                	
+    	       		int beforeRow = GridPane.getRowIndex(image.getParent());  
+    	       		setbCoords(beforeColumn, beforeRow);          	                	
     			}   	     			        			     			            		
     		}
-    	};     	
+    	};      	
     }   
 
     private void addDragOverHandling(DragEvent e){   	
@@ -303,6 +307,31 @@ public class Controller {
     		if(dImage.hasContent(imageFormat) && draggingImage != null) { // if the selected image is being dragged and isn't null
     			e.acceptTransferModes(TransferMode.MOVE); //Accepts the moving transfermode of the drag
     		}	
+    }
+    
+	private void setbCoords(int column, int row){
+		bCoords[0] = column;
+		bCoords[1] = row;
+	}	
+    
+    private void setaCoords(int column, int row){
+		aCoords[0] = column;
+		aCoords[1] = row;
+    }
+    
+    private void calculateMoveDistance(){
+    	mCoords[0] = aCoords[0] - bCoords[0];
+    	mCoords[1] = aCoords[1] - bCoords[1];
+    }
+    
+    private void calculateReplaceCoords(){
+    	nCoords[0] = fCoords[0] - mCoords[0];
+    	nCoords[1] = fCoords[1] - mCoords[1];
+    }
+    
+    private void calculateNewCoords(){
+    	newCoords[0] = a2Coords[0] + mCoords[0];
+    	newCoords[1] = a2Coords[1] + mCoords[1];
     }
     
     private void addDragDroppedHandling(DragEvent e){
@@ -318,47 +347,37 @@ public class Controller {
 			
 		}						  			
 					
-		int finalColumn = GridPane.getColumnIndex((Node) e.getSource());
-		int finalRow = GridPane.getRowIndex((Node) e.getSource());  
+		fCoords[0] = board.getColumnInd((Node) e.getSource());
+		fCoords[1] = board.getRowInd((Node) e.getSource());  
 			
-		System.out.println("fColumn: " + finalColumn + " fRow: " + finalRow);
+		System.out.println("fColumn: " + fCoords[0] + " fRow: " + fCoords[1]);
 			
-		aCoords[0] = finalColumn;
-		aCoords[1] = finalRow;
-			
-		int moveColumn = aCoords[0] - bCoords[0];
-		int moveRow = aCoords[1] - bCoords[1]; 
+		setaCoords(fCoords[0], fCoords[1]);
+		calculateMoveDistance();	
 		
-		System.out.println("mColumn: " + moveColumn + " mRow: " + moveRow);
-			
-		int index = 0;  				 								
+		System.out.println("mColumn: " + mCoords[0] + " mRow: " + mCoords[1]);
 		boolean overlap = false;
-				
+		int index = 0;  			
+		board = view.getGrid();
 		for(ImageView image : group.getGroup()){   	
 				   					
    			int size = group.groupSize() - 2;
 				
-            if(index <= size){
-              			
-              	int newColumn = 0;
-       			int newRow = 0;
+            if(index <= size){           
        					
        	        if(group.groupSize() > 1){ 
-       	               		
-       	        	board = view.getGrid();   	
-       				StackPane multipleImage = (StackPane) getNode(board, finalColumn, finalRow);
+       	               		   	
+       				StackPane multipleImage = (StackPane) getNode(board, fCoords[0], fCoords[1]);
        	   	               		               	        	
        	   	        if(multipleImage.getChildren().contains(image)){
        	   	               			
-       	   	        	newColumn = finalColumn - moveColumn;
-       	   	            newRow = finalRow - moveRow;
+       	   	        	calculateReplaceCoords();
        	   	               		
-       	   	            StackPane splitPane = ((StackPane) getNode(board, newColumn, newRow)); 
+       	   	            StackPane splitPane = ((StackPane) getNode(board, nCoords[0], nCoords[1])); 
        	   	            splitPane.getChildren().remove(multipleImage.getChildren().get(0));
        	   	            splitPane.getChildren().add(multipleImage.getChildren().get(0));      	
        	   	               		
-                        overlap = true;
-                          		
+                        overlap = true;                         		
        	   	        }
        	   	        
        	   	        index++;  
@@ -367,20 +386,17 @@ public class Controller {
 		}	
 			  				
        	for(ImageView image : group.getGroup()){        
-       		               		
-       		int aColumn = GridPane.getColumnIndex((StackPane)image.getParent());
-       		int aRow = GridPane.getRowIndex((StackPane)image.getParent()); 
-       		       		       		
-       		int movedColumn = aColumn + moveColumn;
-       		int movedRow = aRow + moveRow;
+       		        
+       		a2Coords[0] = board.getColumnInd(image.getParent());
+       		a2Coords[1] = board.getRowInd(image.getParent());
+       		     
+       		calculateNewCoords();
        		
        		if(group.groupSize() > 1){              			
 
-       			if ((aColumn != finalColumn || aRow != finalRow) && overlap == false){     		       				       	           				       			
-       				   				
-       				board = view.getGrid();	
-       				
-       				StackPane groupMove = (StackPane) getNode(board, movedColumn, movedRow);
+       			if ((a2Coords[0] != fCoords[0] || a2Coords[1] != fCoords[1]) && overlap == false){     		       				       	           				       			
+       				   				 				
+       				StackPane groupMove = (StackPane) getNode(board, newCoords[0], newCoords[1]);
        				groupMove.getChildren().add(image);
                   		                	
                	}          		
@@ -433,18 +449,8 @@ public class Controller {
 			}
 		}
 	
-	private void addKeyHandling(ActionEvent event){
-		
-		board = view.getGrid();	
-														
-		ArrayList<Integer> xCoords = new ArrayList<Integer>();
-		ArrayList<Integer> yCoords = new ArrayList<Integer>();
-			
-		int centerX = 0;
-		int centerY = 0;
-			
-		for(ImageView node : group.getGroup()) {   				   					
-			
+	private void singleRotation(){
+		for(ImageView node : group.getGroup()) {   				   							
 			node.setPreserveRatio(true);   					    
 		    node.getStyleClass().remove("highlight");
 			System.out.println("rotating image");
@@ -454,11 +460,26 @@ public class Controller {
 			Image snapshot = node.snapshot(parameters, null);   	
 			node.setImage(snapshot); 				
 			node.getStyleClass().add("highlight");
-						
+		}
+	}
+	
+	private void groupRotation(){
+		
+		board = view.getGrid();	
+		
+		ArrayList<Integer> xCoords = new ArrayList<Integer>();
+		ArrayList<Integer> yCoords = new ArrayList<Integer>();
+			
+		int centerX = 0;
+		int centerY = 0;
+		
+		for(ImageView node : group.getGroup()) {   				   					
+			
 			if(group.groupSize() > 1){
-							    							
-				int imageRow = GridPane.getRowIndex(node.getParent());
-				int imageColumn = GridPane.getColumnIndex(node.getParent());					
+				
+				int imageColumn = board.getColumnInd(node.getParent());					
+				int imageRow = board.getRowInd(node.getParent());
+				
 				xCoords.add(imageColumn);
 				yCoords.add(imageRow);    							
 							    							
@@ -468,9 +489,10 @@ public class Controller {
 			}    			
 				
 			if(group.groupSize() > 1){
-					    					        							     				        		
+					    				
     			int xCenter = (xCoords.size() + 1) / 2;
-    			int yCenter = (yCoords.size() + 1) / 2;			
+    			int yCenter = (yCoords.size() + 1) / 2;		
+    			
         		centerX = xCoords.get(xCenter);
         		centerY = yCoords.get(yCenter); 		
     							     				       				   	
@@ -482,8 +504,8 @@ public class Controller {
 					   					
 				if(group.groupSize() > 1){
 					
-					int imageRow = GridPane.getRowIndex(node.getParent());
-					int imageColumn = GridPane.getColumnIndex(node.getParent());
+					int imageColumn = board.getColumnInd(node.getParent());
+					int imageRow = board.getRowInd(node.getParent());
 					
 					int dx = centerX - imageColumn;
 					int dy = centerY - imageRow;
@@ -509,11 +531,22 @@ public class Controller {
 	                StackPane groupMove = (StackPane) getNode(board, newPosX, newPosY);
 	                   	                    
 	                groupMove.getChildren().remove(node);                        			
-	                groupMove.getChildren().add(node);   											    										
-													
+	                groupMove.getChildren().add(node);   											    																							
 				}				
-			} 	  		
-		}	    
+			} 	 
+	}
+	
+	private void addRotationHandling(ActionEvent event){
+		
+		singleRotation();
+		groupRotation();
+			 		
+	}	    
+	
+    private void rotateBoard(ActionEvent event){
+    	board = view.getGrid();
+    	board.setRotate(board.getRotate() + 90);
+    }
 	
 	private void clearBoardHandling(ActionEvent event){
 		resetBoard();

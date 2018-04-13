@@ -80,9 +80,10 @@ public class BuildUI {
     private VBox granBox = new VBox();
     private Slider granularity = new Slider();
     private Label granLabel = new Label("Modify Granularity (Warning, Resets Board)");
+    private int defaultColumn = 7;
+    private int defaultRow = 7;
     
-    public BuildUI(){	
-    	    	
+    public BuildUI(){	 	
     	buildFloor(); 
     	buildRooms();
     	buildPallet();
@@ -165,16 +166,10 @@ public class BuildUI {
 	public void buildFloor(){
 		
     	board = new Board();
-    	floor = new GridPane();
-    	        	
+    	floor = new GridPane();  	        	
     	board.setBoard(floor); 
-    	
-    	board.setColumn(7);
-    	board.setRow(7); 	 
-    	
-    	int column = board.getColumn();
-    	int row = board.getRow();
-    	board.createBoard(board, column, row);
+
+    	board.createBoard(board, defaultColumn, defaultRow);
     	
     	board.setMaxWidth(950);
     	board.setMaxHeight(950);
@@ -407,8 +402,7 @@ public class BuildUI {
     
     public void addToggleGridHandler(EventHandler<ActionEvent>handler){
     	gridLines.setOnAction(handler);
-    }
-    
+    }    
     
     public void addStoneHandler(EventHandler<ActionEvent> handler){
     	stone.setOnAction(handler);

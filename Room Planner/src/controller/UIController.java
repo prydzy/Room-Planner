@@ -20,7 +20,6 @@ public class UIController{
 		view.addStoneHandler(this::toggleStoneHandler);
 		view.addWoodListener(this::toggleWoodHandler);
 		view.addMarbleListener(this::toggleMarbleHandler);
-		view.addRotateBoardHandler(this::rotateBoard);
 		view.addToggleGridHandler(this::toggleGridLines);
 	}
 	
@@ -111,11 +110,6 @@ public class UIController{
 		});
 		
 	}
-	
-    private void rotateBoard(ActionEvent event){
-    	board = view.getGrid();
-    	board.setRotate(board.getRotate() + 90);
-    }
     
 	private void toggleGridLines(ActionEvent event){
 		
