@@ -98,7 +98,7 @@ public class DragAndDropTesting {
 		// Test the initial Coordinates, these are calculated on Drag Event.
 		
 		int beforeColumn = board.getColumnInd(testImage.getParent());
-   		int beforeRow = GridPane.getRowIndex(testImage.getParent());  
+   		int beforeRow = board.getRowInd(testImage.getParent());  
    		   		   		   		
    		setbCoords(beforeColumn, beforeRow);
    		
@@ -108,8 +108,8 @@ public class DragAndDropTesting {
    		assertEquals(testInitialColumn, 2);
    		assertEquals(testInitialRow, 2);
    		
-		int beforeColumn2 = GridPane.getColumnIndex(testImage2.getParent());
-   		int beforeRow2 = GridPane.getRowIndex(testImage2.getParent());  
+		int beforeColumn2 =  board.getColumnInd(testImage2.getParent());
+   		int beforeRow2 = board.getRowInd(testImage2.getParent());  
    		
    		assertEquals(beforeColumn2, 2);
    		assertEquals(beforeRow2, 3); 	
@@ -172,9 +172,7 @@ public class DragAndDropTesting {
    		
    		a2Coords[0] = board.getColumnInd(testImage2.getParent());
    		a2Coords[1] = board.getRowInd(testImage2.getParent());
-   		
-   		System.out.println(a2Coords[1]);
-   		
+   		   		
    		calculateNewCoords();
    		
    		testFinalColumn = newCoords[0];

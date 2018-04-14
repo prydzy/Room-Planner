@@ -553,7 +553,7 @@ public class Controller {
     	rotateBoard();
     }
     
-    private void rotateBoard(){
+    public void rotateBoard(){
     	board = view.getGrid();
     	board.setRotate(board.getRotate() + 90);
     }
@@ -584,13 +584,12 @@ public class Controller {
 	}
 	
 	
-	private void setGranularity(){
+	public Integer[] setGranularity(){
 		
 		granularityCoords[0] = 0;
 		granularityCoords[1] = 0;
 		
-		int count = 0;
-		count = (int) view.getSlider().getValue();			
+		int count = (int) view.getSlider().getValue();			
 		
 		switch (count) {
 			default:granularityCoords[0] = 7; 
@@ -606,12 +605,13 @@ public class Controller {
 					granularityCoords[1] = 10;
 					break;
 			case 4: granularityCoords[0] = 11; 
-				granularityCoords[1] = 11;
+					granularityCoords[1] = 11;
 					break;		
 			case 5: granularityCoords[0] = 12; 
 					granularityCoords[1] = 12;
 					break;
 		}
+		return granularityCoords;
 	}
     
     private void copyItemHandling(ActionEvent event){
