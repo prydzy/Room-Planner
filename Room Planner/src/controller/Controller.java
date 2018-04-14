@@ -455,7 +455,7 @@ public class Controller {
 			}
 		}
 	
-	private void singleRotation(){
+	public void singleRotation(){
 		for(ImageView node : group.getGroup()) {   				   							
 			node.setPreserveRatio(true);   					    
 		    node.getStyleClass().remove("highlight");
@@ -469,7 +469,7 @@ public class Controller {
 		}
 	}
 	
-	private void groupRotation(){
+	public void groupRotation(){
 		
 		board = view.getGrid();	
 		

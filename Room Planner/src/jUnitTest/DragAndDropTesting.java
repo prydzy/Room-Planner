@@ -41,7 +41,7 @@ public class DragAndDropTesting {
 	/*
 	 * The JUnit test case results in null pointer exception if these methods
 	 * were attempted to be called from the controller. Therefore for this unit test
-	 * they have been manually copied into as below. 
+	 * they have been manually copied in as below. 
 	 */
 	
 	public void setbCoords(int column, int row){			
@@ -136,7 +136,7 @@ public class DragAndDropTesting {
    		testMoveColumn = mCoords[0];
    		testMoveRow = mCoords[1];
    		
-   		// The distance the furnitures has to move should be 1 Column and 2 Rows.
+   		// The distance the furnitures have to move should be 1 Column and 2 Rows.
    		
    		assertEquals(testMoveColumn, 1);
    		assertEquals(testMoveRow, 2);
@@ -162,9 +162,9 @@ public class DragAndDropTesting {
    		assertEquals(testReplaceRow, 2);
    		
    		/*
-   		 * Now the final feature of the drag and drop is the coordinates
+   		 * Now the final bits of logic for the drag and drop handler is the coordinates
    		 * of the grouped item. This is the furniture that isn't displayed
-   		 * in the Drag View. In this case the A2 coordinates will be (2,3)
+   		 * in the Drag View. In this case the A2 coordinates will be (2,3),
    		 * the moveCoordinates were 1 and 2. So the final coordinates should be
    		 * 3 and 5.
    		 * 
