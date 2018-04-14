@@ -49,6 +49,7 @@ public class Controller {
 	private Integer[] nCoords = new Integer[2];
 	private Integer[] a2Coords = new Integer[2];
 	private Integer[] newCoords = new Integer[2];
+	private Integer[] granularityCoords = new Integer[2];
 	
 	public Controller(BuildUI view, Board board, Pallet pallet, Group group){
 		this.view = view;
@@ -60,39 +61,39 @@ public class Controller {
 
 	private void attachEventHandler(){
 		
-		view.addSofaHandler(this::addSofa);
-		view.addBedHandler(this::addBed);
-		view.addBathHandler(this::addBath);
-		view.addBookshelf(this::addBookshelf);
-		view.addClearHandler(this::clearPallet);
+		view.addSofaHandler(this::addSofaHandling);
+		view.addBedHandler(this::addBedHandling);
+		view.addBathHandler(this::addBathHandling);
+		view.addBookshelf(this::addBookshelfHandling);
+		view.addClearHandler(this::clearPalletHandling);
 		view.addDragOverHandler(this::addDragOverHandling);
 		view.addDragDroppedHandler(this::addDragDroppedHandling);
 		view.addScrollHandler(this::addScrollHandling);
 		view.addRotateHandler(this::addRotationHandling);
 		view.addResetHandler(this::clearBoardHandling);
-		view.addCopyHandler(this::copyItem);
-		view.addDeleteHandler(this::deleteItem);
-		view.addChairHandler(this::addChair);
-		view.addDeskHandler(this::addDesk);
-		view.addFridgeHandler(this::addFridge);
-		view.addTableHandler(this::addLongtable);
-		view.addOvenHandler(this::addOven);
-		view.addShowerHandler(this::addShower);
-		view.addSinkHandler(this::addSink);
-		view.addbSinkHandler(this::addSink1);
-		view.addDeskchairHandler(this::addDchair);
-		view.addTvHandler(this::addTV);
-		view.addSquareTableHandler(this::addSquareTable);
-		view.addSideboardHandler(this::addSideBoard);
-		view.addWardrobeHandler(this::addWardrobe);
-		view.addDrawerHandler(this::addDrawer);
-		view.addVanityUnitHandler(this::addVanityUnit);
-		view.addWorkTopHandler(this::addWorkTop);
-		view.addPoolTableHandler(this::addPoolTable);
-		view.addRugHandler(this::addRug);
+		view.addCopyHandler(this::copyItemHandling);
+		view.addDeleteHandler(this::deleteItemHandling);
+		view.addChairHandler(this::addChairHandling);
+		view.addDeskHandler(this::addDeskHandling);
+		view.addFridgeHandler(this::addFridgeHandling);
+		view.addTableHandler(this::addLongtableHandling);
+		view.addOvenHandler(this::addOvenHandling);
+		view.addShowerHandler(this::addShowerHandling);
+		view.addSinkHandler(this::addSinkHandling);
+		view.addbSinkHandler(this::addSink1Handling);
+		view.addDeskchairHandler(this::addDchairHandling);
+		view.addTvHandler(this::addTVHandling);
+		view.addSquareTableHandler(this::addSquareTableHandling);
+		view.addSideboardHandler(this::addSideBoardHandling);
+		view.addWardrobeHandler(this::addWardrobeHandling);
+		view.addDrawerHandler(this::addDrawerHandling);
+		view.addVanityUnitHandler(this::addVanityUnitHandling);
+		view.addWorkTopHandler(this::addWorkTopHandling);
+		view.addPoolTableHandler(this::addPoolTableHandling);
+		view.addRugHandler(this::addRugHandling);
 		view.addSliderHandler(this::addSliderHandling);
-		view.addLoadHandler(this::loadFile);
-		view.addRotateBoardHandler(this::rotateBoard);
+		view.addLoadHandler(this::loadFileHandling);
+		view.addRotateBoardHandler(this::rotateBoardHandling);
 		view.addSaveHandler(arg0 -> {
 			try {
 				saveBoardHandling(arg0);
@@ -102,112 +103,112 @@ public class Controller {
 		});
 	}
 	
-    private void addSofa(ActionEvent event){
+    private void addSofaHandling(ActionEvent event){
     	Image sofa = new LocatedImage("file:sofa.png");
     	addFurniture(sofa);   	
     }
        
-    private void addSideBoard(ActionEvent event){
+    private void addSideBoardHandling(ActionEvent event){
     	Image sideboard = new LocatedImage("file:sideboard.png");
     	addFurniture(sideboard);     
     }
     
-    private void addSquareTable(ActionEvent event){
+    private void addSquareTableHandling(ActionEvent event){
     	Image squaretable = new LocatedImage("file:squaretable.png");
     	addFurniture(squaretable); 
     }
     
-    private void addTV(ActionEvent event){
+    private void addTVHandling(ActionEvent event){
     	Image tv = new LocatedImage("file:tv.png");
     	addFurniture(tv);   	    	
     }
     
-    private void addPoolTable(ActionEvent event){
+    private void addPoolTableHandling(ActionEvent event){
     	Image pooltable = new LocatedImage("file:pooltable.png");
     	addFurniture(pooltable);   
     }
     
-    private void addRug(ActionEvent event){
+    private void addRugHandling(ActionEvent event){
     	Image rug = new LocatedImage("file:rug.png");
     	addFurniture(rug);   
     }
     
-    private void addWorkTop(ActionEvent event){
+    private void addWorkTopHandling(ActionEvent event){
     	Image worktop = new LocatedImage("file:worktop.png");
     	addFurniture(worktop);   	    	
     }
     
-    private void addWardrobe(ActionEvent event){
+    private void addWardrobeHandling(ActionEvent event){
     	Image wardrobe = new LocatedImage("file:wardrobe.png");
     	addFurniture(wardrobe);   	    	
     }
     
-    private void addDrawer(ActionEvent event){
+    private void addDrawerHandling(ActionEvent event){
     	Image drawer = new LocatedImage("file:drawer.png");
     	addFurniture(drawer);   	    	
     }
     
-    private void addChair(ActionEvent event){
+    private void addChairHandling(ActionEvent event){
     	Image chair = new LocatedImage("file:chair.png");
     	addFurniture(chair);   	    	
     }
     
-    private void addDchair(ActionEvent event){
+    private void addDchairHandling(ActionEvent event){
     	Image dchair = new LocatedImage("file:dchair.png");
     	addFurniture(dchair);   	    	
     }
     
-    private void addDesk(ActionEvent event){
+    private void addDeskHandling(ActionEvent event){
     	Image desk = new LocatedImage("file:desk.png");
     	addFurniture(desk);
     }
     
-    private void addFridge(ActionEvent event){
+    private void addFridgeHandling(ActionEvent event){
     	Image fridge = new LocatedImage("file:fridge.png");
     	addFurniture(fridge);
     }
     
-    private void addLongtable(ActionEvent event){
+    private void addLongtableHandling(ActionEvent event){
     	Image ltable = new LocatedImage("file:ltable.png");
     	addFurniture(ltable);
     }
     
-    private void addVanityUnit(ActionEvent event){
+    private void addVanityUnitHandling(ActionEvent event){
     	Image vanityunit = new LocatedImage("file:vanityunit.png");
     	addFurniture(vanityunit);
     }
     
-    private void addOven(ActionEvent event){
+    private void addOvenHandling(ActionEvent event){
     	Image oven = new LocatedImage("file:oven.png");
     	addFurniture(oven);
     }
     
-    private void addShower(ActionEvent event){
+    private void addShowerHandling(ActionEvent event){
     	Image shower = new LocatedImage("file:shower.png");
     	addFurniture(shower);
     }
     
-    private void addSink(ActionEvent event){
+    private void addSinkHandling(ActionEvent event){
     	Image sink = new LocatedImage("file:sink.png");
     	addFurniture(sink);
     }
     
-    private void addSink1(ActionEvent event){
+    private void addSink1Handling(ActionEvent event){
     	Image sink1 = new LocatedImage("file:sink1.png");
     	addFurniture(sink1);
     }
     
-    private void addBed(ActionEvent event){
+    private void addBedHandling(ActionEvent event){
     	Image bed = new LocatedImage("file:bed.png");
     	addFurniture(bed);   	    	
     }
     
-	private void addBath(ActionEvent event){
+	private void addBathHandling(ActionEvent event){
     	Image bath = new LocatedImage("file:bath.png");
     	addFurniture(bath);   	    	
     }
     
-    private void addBookshelf(ActionEvent event){
+    private void addBookshelfHandling(ActionEvent event){
     	Image bed = new LocatedImage("file:bookshelf.png");
     	addFurniture(bed);   	    	
     }
@@ -237,7 +238,7 @@ public class Controller {
 		
     }
     
-    private void clearPallet(ActionEvent event){
+    private void clearPalletHandling(ActionEvent event){
     	pallet.clear();
     	view.clearAll();
     }
@@ -283,22 +284,7 @@ public class Controller {
     	}
     	       	
     	EventHandler<MouseEvent> onDragDetectedEventHandler = event -> {
-    		        		
-    		for(ImageView image : group.getGroup()){    
-    			        			   			
-    			Dragboard dImage = image.startDragAndDrop(TransferMode.MOVE); 
-    			dImage.setDragView(image.snapshot(null, null));       			
-    			ClipboardContent cc = new ClipboardContent();
-    			cc.put(imageFormat, " "); 
-    			dImage.setContent(cc); 
-    			draggingImage = image;
-    			
-    			if(image.getParent() instanceof StackPane){				
-    				int beforeColumn = GridPane.getColumnIndex(image.getParent());
-    	       		int beforeRow = GridPane.getRowIndex(image.getParent());  
-    	       		setbCoords(beforeColumn, beforeRow);          	                	
-    			}   	     			        			     			            		
-    		}
+    			moveImage();
     	};      	
     }   
 
@@ -309,27 +295,47 @@ public class Controller {
     		}	
     }
     
-	private void setbCoords(int column, int row){
-		bCoords[0] = column;
-		bCoords[1] = row;
-	}	
-    
-    private void setaCoords(int column, int row){
-		aCoords[0] = column;
-		aCoords[1] = row;
+    public void moveImage(){
+		for(ImageView image : group.getGroup()){    
+			
+			board = view.getGrid();
+			        			   			
+			Dragboard dImage = image.startDragAndDrop(TransferMode.MOVE); 
+			dImage.setDragView(image.snapshot(null, null));       			
+			ClipboardContent cc = new ClipboardContent();
+			cc.put(imageFormat, " "); 
+			dImage.setContent(cc); 
+			draggingImage = image;
+			
+			if(image.getParent() instanceof StackPane){				
+				int beforeColumn = board.getColumnInd(image.getParent());
+	       		int beforeRow = board.getRowInd(image.getParent());  
+	       		setbCoords(beforeColumn, beforeRow);          	                	
+			}   	     			        			     			            		
+		}
     }
     
-    private void calculateMoveDistance(){
+	public void setbCoords(int column, int row){			
+		bCoords[0] = column;
+		bCoords[1] = row;	
+	}	
+    
+	public void setaCoords(int column, int row){
+		aCoords[0] = column;
+		aCoords[1] = row;		
+    }
+    
+	public void calculateMoveDistance(){
     	mCoords[0] = aCoords[0] - bCoords[0];
     	mCoords[1] = aCoords[1] - bCoords[1];
     }
     
-    private void calculateReplaceCoords(){
+	public void calculateReplaceCoords(){
     	nCoords[0] = fCoords[0] - mCoords[0];
     	nCoords[1] = fCoords[1] - mCoords[1];
     }
     
-    private void calculateNewCoords(){
+	public void calculateNewCoords(){
     	newCoords[0] = a2Coords[0] + mCoords[0];
     	newCoords[1] = a2Coords[1] + mCoords[1];
     }
@@ -543,7 +549,11 @@ public class Controller {
 			 		
 	}	    
 	
-    private void rotateBoard(ActionEvent event){
+    private void rotateBoardHandling(ActionEvent event){
+    	rotateBoard();
+    }
+    
+    private void rotateBoard(){
     	board = view.getGrid();
     	board.setRotate(board.getRotate() + 90);
     }
@@ -555,7 +565,7 @@ public class Controller {
 		view.addDragOverHandler(this::addDragOverHandling);
 		view.addDragDroppedHandler(this::addDragDroppedHandling);
 	}
-	
+
     private void resetBoard(){
     	System.out.println("Board Cleared");
     	board = view.getGrid();
@@ -565,46 +575,53 @@ public class Controller {
 	private void addSliderHandling(MouseEvent event){
 		board = view.getGrid();
 		
-		int newColumn = 0;
-		int newRow = 0;
+		setGranularity();		
+		resetBoard();
+		
+		board.createBoard(board, granularityCoords[0], granularityCoords[1]);	
+		view.addDragOverHandler(this::addDragOverHandling);
+		view.addDragDroppedHandler(this::addDragDroppedHandling);
+	}
+	
+	
+	private void setGranularity(){
+		
+		granularityCoords[0] = 0;
+		granularityCoords[1] = 0;
 		
 		int count = 0;
 		count = (int) view.getSlider().getValue();			
 		
 		switch (count) {
-			default:newColumn = 7; 
-					newRow = 7;
+			default:granularityCoords[0] = 7; 
+					granularityCoords[1] = 7;
 					break;
-			case 1: newColumn = 8; 
-					newRow = 8;
+			case 1: granularityCoords[0] = 8; 
+					granularityCoords[1] = 8;
 					break;
-			case 2: newColumn = 9; 
-					newRow = 9;
+			case 2: granularityCoords[0] = 9; 
+					granularityCoords[1] = 9;
 					break;
-			case 3: newColumn = 10; 
-					newRow = 10;
+			case 3: granularityCoords[0] = 10; 
+					granularityCoords[1] = 10;
 					break;
-			case 4: newColumn = 11; 
-					newRow = 11;
+			case 4: granularityCoords[0] = 11; 
+				granularityCoords[1] = 11;
 					break;		
-			case 5: newColumn = 12; 
-					newRow = 12;
+			case 5: granularityCoords[0] = 12; 
+					granularityCoords[1] = 12;
 					break;
 		}
-		
-		resetBoard();
-		board.createBoard(board, newColumn, newRow);	
-		view.addDragOverHandler(this::addDragOverHandling);
-		view.addDragDroppedHandler(this::addDragDroppedHandling);
 	}
     
-    private void copyItem(ActionEvent event){
-    	
+    private void copyItemHandling(ActionEvent event){
+    	copyItem();                 	
+    }
+    
+    private void copyItem(){
     	Board copyGrid = view.getCopyGrid();
     	copyGrid.getChildren().clear();
-    	String floor = view.getGrid().getId();
-   	 	
-   	 	
+    	String floor = view.getGrid().getId(); 	
    	 	ArrayList<StackPane> items = new ArrayList<StackPane>();
         items.clear();
              	 	
@@ -640,24 +657,27 @@ public class Controller {
             		copyGrid.setId(floor);
             		}
             	}
-    		}                                
+    		}   
     	}
     
-    	private void deleteItem(ActionEvent event){
-    		
-    	boolean clear = false;
-    	
-    	for(ImageView node : group.getGroup()) {				
-			if(node.getParent() instanceof StackPane){
-				((StackPane)node.getParent()).getChildren().clear();
-				clear = true;
-			}		
-		}
-		
-		if(clear == true){
-			group.clearGroup();;
-			}				
+    	private void deleteItemHandling(ActionEvent event){
+    		deleteItem();
     	}	
+    	
+    	private void deleteItem(){
+        	boolean clear = false;
+        	
+        	for(ImageView node : group.getGroup()) {				
+    			if(node.getParent() instanceof StackPane){
+    				((StackPane)node.getParent()).getChildren().clear();
+    				clear = true;
+    			}		
+    		}
+    		
+    		if(clear == true){
+    			group.clearGroup();;
+    			}	
+    	}
 	
     	private void filterArray(ArrayList<String> arr){
     		
@@ -691,8 +711,11 @@ public class Controller {
     		loadBoard(imageStrings, imageRotations);    		
     	}
     	
-    	private void loadFile(ActionEvent event){
-
+    	private void loadFileHandling(ActionEvent event){
+    		loadFile();
+    	}
+    	
+    	private void loadFile(){
     		ArrayList<String> array = new ArrayList<String>();
     		try(BufferedReader br = new BufferedReader(new FileReader("board.txt")))
             {
@@ -706,7 +729,7 @@ public class Controller {
             } catch (IOException e) {
                 e.printStackTrace();
             }   		    		
-    		filterArray(array);  		
+    		filterArray(array);  
     	}
     	
     	private void loadBoard(ArrayList<String> arr, ArrayList<Integer> ints){
