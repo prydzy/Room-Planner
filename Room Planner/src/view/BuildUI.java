@@ -23,6 +23,17 @@ import javafx.scene.layout.VBox;
 
 import model.Board;
 
+/**
+ * 
+ * @author Sam Clark
+ *
+ * This class represents the user interface of the Room Planner. 
+ * It initialises the components and their layout before they are 
+ * displayed. 
+ * 
+ * @version 1.0
+ */
+
 public class BuildUI {
 
 	private Board board;
@@ -82,13 +93,21 @@ public class BuildUI {
     private Label granLabel = new Label("Modify Granularity (Warning, Resets Board)");
     private int defaultColumn = 7;
     private int defaultRow = 7;
-    
+    /**
+     * This constructs the user interface and by default sets the layouts
+     * for the room category panes, the floor, the pallet and the buttons.
+     */
     public BuildUI(){	 	
     	buildFloor(); 
     	buildRooms();
     	buildPallet();
     	buildButtons();
     } 
+    
+    /**
+     * This builds each individual room category and populates each category
+     * with the suitable furniture buttons. This is located left of the pallet.
+     */
     
     public void buildRooms(){
     	
@@ -110,6 +129,12 @@ public class BuildUI {
         rooms.setPickOnBounds(false);
         
     }
+    
+    /**
+     * This sets the positioning and layouts for the buttons and other 
+     * interactive elements on the user interface that aren't located on 
+     * the board.
+     */
     
 	public void buildButtons(){		
                   
@@ -148,6 +173,10 @@ public class BuildUI {
         
 	}
 
+	/**
+	 * This sets the layouts for the pallet located left of the board.
+	 */
+	
 	public void buildPallet(){
 		
         imgBox.setHgap(5.0);
@@ -163,6 +192,10 @@ public class BuildUI {
         
 	}
 
+	/**
+	 * This initialises and sets the layouts for the board/floor.
+	 */
+	
 	public void buildFloor(){
 		
     	board = new Board();
@@ -178,6 +211,13 @@ public class BuildUI {
     	        	        	
 	}
 
+	/**
+	 * This is the default method which is called by the AppLoader. It constructs
+	 * each individual element on the user interface and displays them all on the 
+	 * same HBox.
+	 * @return
+	 */
+	
     public HBox buildView(){  	
     	    	    	    
     	saveButtons.getChildren().addAll(saveButton, loadButton);
@@ -203,163 +243,282 @@ public class BuildUI {
     	return box;
     	
 	}
-    
+    /**
+     * This returns the selection of room categories.
+     * @return The selection of room categories
+     */
     public ComboBox<String> getChoice(){
     	return furniture;
     }
-    
+    /**
+     * This returns the granularity slider.
+     * @return The slider
+     */
     public Slider getSlider(){
     	return granularity;
     }
-    
+    /**
+     * This returns the Bed Room display.
+     * @return The bedroom pane
+     */
     public Pane getBedroom(){
     	return bedroom;
     }
-    
+    /**
+     * This returns the Living Room display.
+     * @return The living room pane
+     */
     public Pane getLivingroom(){
     	return livingroom;
     }
-    
+    /**
+     * This returns the Kitchen display.
+     * @return The kitchen pane
+     */
     public Pane getKitchen(){
     	return kitchen;
     }
-    
+    /**
+     * This returns the Bathroom display.
+     * @return The bathroom pane
+     */
     public Pane getBathroom(){
     	return bathroom;
     }
-    
+    /**
+     * This returns the Miscellaneous display.
+     * @return The miscellaneous pane
+     */
     public Pane getMisc(){
     	return misc;
     }
-    
+    /**
+     * This returns the Stone toggle.
+     * @return The stone toggle
+     */
     public Toggle getStone(){
     	return stone;
     }
-    
+    /**
+     * This returns the Marble toggle.
+     * @return the marble toggle
+     */
     public Toggle getMarble(){
     	return marble;
     }
-    
+    /**
+     * This returns the Wood toggle.
+     * @return the wood toggle.
+     */
     public Toggle getWood(){
     	return wood;
     }
-    	
+    /**
+     * This returns the Grid that items are positioned on when copied.
+     * @return the copy board
+     */
     public Board getCopyGrid(){
     	return copyBoard;
     }
-    	
+    /**
+     * This returns the floor grid that is used as the floor plan.
+     * @return the board
+     */
     public Board getGrid(){
     	return board;
     }
-    
+    /**
+     * This adds all the images to the ImgBox which is the pallet.
+     * @param image The images to be added.
+     */
     public void addAll(ImageView[] image){
     	imgBox.getChildren().addAll(image);
     }
-    	
+    /**
+     * This clears all images from the ImgBox which is the pallet.
+     */
     public void clearAll(){
     	imgBox.getChildren().clear();    	
     }
-    	
+    /**
+     * Attaches an event handler to the Choice Box.
+     * @param handler The choice box handler
+     */
     public void addChoiceBoxHandler(EventHandler<ActionEvent>handler){
     	furniture.setOnAction(handler);
     }
-    
+    /**
+     * Attaches an event handler to the Sofa button.
+     * @param handler The sofa button handler
+     */
     public void addSofaHandler(EventHandler<ActionEvent>handler){
     	sofaBtn.setOnAction(handler);
     }
-    	
+    /**
+     * Attaches an event handler to the bed button.
+     * @param handler The bed button handler
+     */    	
     public void addBedHandler(EventHandler<ActionEvent>handler){
     	bedBtn.setOnAction(handler);
     }
-    	
+    /**
+     * Attaches an event handler to the chair button.
+     * @param handler The chair button handler
+     */    	
     public void addChairHandler(EventHandler<ActionEvent>handler){
     	chairBtn.setOnAction(handler);
     }
-    
+    /**
+     * Attaches an event handler to the desk button.
+     * @param handler The desk button handler
+     */    
     public void addDeskHandler(EventHandler<ActionEvent>handler){
     	deskBtn.setOnAction(handler);
     }
-    
+    /**
+     * Attaches an event handler to the squaretable button.
+     * @param handler The squaretable button handler
+     */    
     public void addSquareTableHandler(EventHandler<ActionEvent>handler){
     	squaretableBtn.setOnAction(handler);
     }
-    
+    /**
+     * Attaches an event handler to the side button.
+     * @param handler The side button handler
+     */    
     public void addSideboardHandler(EventHandler<ActionEvent>handler){
     	sideBtn.setOnAction(handler);
     }
-    
+    /**
+     * Attaches an event handler to the drawer button.
+     * @param handler The drawer button handler
+     */    
     public void addDrawerHandler(EventHandler<ActionEvent>handler){
     	drawerBtn.setOnAction(handler);
     }
-    
+    /**
+     * Attaches an event handler to the wardrobe button.
+     * @param handler The wardrobe button handler
+     */
     public void addWardrobeHandler(EventHandler<ActionEvent>handler){
     	wardrobeBtn.setOnAction(handler);
     }
-    
+    /**
+     * Attaches an event handler to the pooltable button.
+     * @param handler The pooltable button handler
+     */
     public void addPoolTableHandler(EventHandler<ActionEvent>handler){
     	pooltableBtn.setOnAction(handler);
     }
-    
+    /**
+     * Attaches an event handler to the rug button.
+     * @param handler The rug button handler
+     */
     public void addRugHandler(EventHandler<ActionEvent>handler){
     	rugBtn.setOnAction(handler);
     }
-    
+    /**
+     * Attaches an event handler to the sideunit button.
+     * @param handler The sideunit button handler
+     */
     public void addVanityUnitHandler(EventHandler<ActionEvent>handler){
     	sideunitBtn.setOnAction(handler);
     }
-    
+    /**
+     * Attaches an event handler to the deskchair button.
+     * @param handler The deskchair button handler
+     */
     public void addDeskchairHandler(EventHandler<ActionEvent>handler){
     	deskchairBtn.setOnAction(handler);
     }
-    
+    /**
+     * Attaches an event handler to the fridge button.
+     * @param handler The fridge button handler
+     */
     public void addFridgeHandler(EventHandler<ActionEvent>handler){
     	fridgeBtn.setOnAction(handler);
     }
-    
+    /**
+     * Attaches an event handler to the worktop button.
+     * @param handler The worktop button handler
+     */
     public void addWorkTopHandler(EventHandler<ActionEvent>handler){
     	worktopBtn.setOnAction(handler);
     }
-    
+    /**
+     * Attaches an event handler to the table button.
+     * @param handler The table button handler
+     */
     public void addTableHandler(EventHandler<ActionEvent>handler){
     	tableBtn.setOnAction(handler);
     }
-    
+    /**
+     * Attaches an event handler to the oven button.
+     * @param handler The oven button handler
+     */
     public void addOvenHandler(EventHandler<ActionEvent>handler){
     	ovenBtn.setOnAction(handler);
     }
-    
+    /**
+     * Attaches an event handler to the shower button.
+     * @param handler The shower button handler
+     */
     public void addShowerHandler(EventHandler<ActionEvent>handler){
     	showerBtn.setOnAction(handler);
     }
-    
+    /**
+     * Attaches an event handler to the tv button.
+     * @param handler The tv button handler
+     */
     public void addTvHandler(EventHandler<ActionEvent>handler){
     	tvBtn.setOnAction(handler);
     }
-    
+    /**
+     * Attaches an event handler to the sink button.
+     * @param handler The sink button handler
+     */
     public void addSinkHandler(EventHandler<ActionEvent>handler){
     	sinkBtn.setOnAction(handler);
     }
-    
+    /**
+     * Attaches an event handler to the bathroom sink button.
+     * @param handler The bathroom sink button handler
+     */
     public void addbSinkHandler(EventHandler<ActionEvent>handler){
     	bathroomsinkBtn.setOnAction(handler);
     }
-    
+    /**
+     * Attaches an event handler to the bath button.
+     * @param handler The bath button handler
+     */
     public void addBathHandler(EventHandler<ActionEvent>handler){
     	bathBtn.setOnAction(handler);
     }
-    	
+    /**
+     * Attaches an event handler to the bookshelf button.
+     * @param handler The bookshelf button handler
+     */
     public void addBookshelf(EventHandler<ActionEvent>handler){
     	bookshelfBtn.setOnAction(handler);
     }
-    	
+    /**
+     * Attaches an event handler to the clear board button.
+     * @param handler The clear board button handler
+     */
     public void addClearHandler(EventHandler<ActionEvent>handler){
     	clearBtn.setOnAction(handler);
     }   	 
-    
+    /**
+     * Attaches an event handler to the modify granularity slider.
+     * @param handler the granularity slider handler
+     */
     public void addSliderHandler(EventHandler<MouseEvent>handler){  	       	
     	granularity.setOnMouseClicked(handler);  	
     }
-    	
+    /**
+     * Attaches a drag over handler to each child element of the board.
+     * @param handler
+     */
     public void addDragOverHandler(EventHandler<DragEvent>handler){  		
     		
     	board.getChildren().forEach(i -> {		    			
@@ -367,7 +526,10 @@ public class BuildUI {
     	});
     		
     }
-    	
+    /**
+     * Attaches a drag drop handler to each child element of the board.
+     * @param handler
+     */
     public void addDragDroppedHandler(EventHandler<DragEvent>handler){
     				
     	board.getChildren().forEach(i -> {
@@ -375,51 +537,87 @@ public class BuildUI {
     	});
 
     }
-    	
+    /**
+     * Attaches a scroll handler to the board.
+     * @param handler 
+     */
     public void addScrollHandler(EventHandler<ScrollEvent>handler){
        	board.setOnScroll(handler);
     }    
-        
+    /**
+     * Attaches an event handler to the Rotate Item button.
+     * @param handler
+     */
     public void addRotateHandler(EventHandler<ActionEvent>handler){
     	rotateBtn.setOnAction(handler);
     }
-        
+    /**
+     * Attaches an event handler to the Reset Board button.
+     * @param handler
+     */
     public void addResetHandler(EventHandler<ActionEvent>handler){
         clearboardBtn.setOnAction(handler);
     }
-        
+    /**
+     * Attaches an event handler to the Rotate Board button.
+     * @param handler
+     */
     public void addRotateBoardHandler(EventHandler<ActionEvent>handler){
         rotateboardBtn.setOnAction(handler);
     }
-        
+    /**
+     * Attaches an event handler to the copy item button.
+     * @param handler
+     */
     public void addCopyHandler(EventHandler<ActionEvent>handler){
        	copyBtn.setOnAction(handler);
     }
-        
+    /**
+     * Attaches an event handler to the delete item handler;   
+     * @param handler
+     */
     public void addDeleteHandler(EventHandler<ActionEvent>handler){
         deleteBtn.setOnAction(handler);
     }
-    
+    /**
+     * Attaches an event handler to the toggle grid lines handler.
+     * @param handler
+     */
     public void addToggleGridHandler(EventHandler<ActionEvent>handler){
     	gridLines.setOnAction(handler);
     }    
-    
+    /**
+     * Attaches an event handler to the Stone toggle.
+     * @param handler
+     */
     public void addStoneHandler(EventHandler<ActionEvent> handler){
     	stone.setOnAction(handler);
     }
-    
+    /**
+     * Attaches an event handler to the Wood toggle.
+     * @param handler
+     */
     public void addWoodListener(EventHandler<ActionEvent> handler){
     	wood.setOnAction(handler);
     }
-    
+    /**
+     * Attaches an event handler to the Marble toggle.
+     * @param handler
+     */
     public void addMarbleListener(EventHandler<ActionEvent> handler){
     	marble.setOnAction(handler);
     }
-        
+    /**
+     * Attaches an event handler to the Save board handler.
+     * @param handler
+     */
     public void addSaveHandler(EventHandler<ActionEvent> handler){
     	saveButton.setOnAction(handler);
     }
-    
+    /**
+     * Attaches an event handler to the Load board handler.
+     * @param handler
+     */
     public void addLoadHandler(EventHandler<ActionEvent> handler){
     	loadButton.setOnAction(handler);
     }
