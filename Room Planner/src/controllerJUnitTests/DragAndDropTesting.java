@@ -37,37 +37,6 @@ public class DragAndDropTesting {
 	int testFinalColumn;
 	int testFinalRow;
 	
-	/*
-	 * The JUnit test case results in null pointer exception if these methods
-	 * were attempted to be called from the controller. Therefore for this unit test
-	 * they have been manually copied in as below. 
-	 */
-	
-	public void setbCoords(int column, int row){			
-		bCoords[0] = column;
-		bCoords[1] = row;	
-	}	
-	
-	public void setaCoords(int column, int row){
-		aCoords[0] = column;
-		aCoords[1] = row;		
-    }
-    
-	public void calculateMoveDistance(){
-    	mCoords[0] = aCoords[0] - bCoords[0];
-    	mCoords[1] = aCoords[1] - bCoords[1];
-    }
-    
-	public void calculateReplaceCoords(){
-    	nCoords[0] = fCoords[0] - mCoords[0];
-    	nCoords[1] = fCoords[1] - mCoords[1];
-    }
-    
-	public void calculateNewCoords(){
-    	newCoords[0] = a2Coords[0] + mCoords[0];
-    	newCoords[1] = a2Coords[1] + mCoords[1];
-    }
-	
 	 @Test
 	 public void coordinateTesting(){	 
 		 
@@ -95,7 +64,7 @@ public class DragAndDropTesting {
 		int beforeColumn = board.getColumnInd(testImage.getParent());
    		int beforeRow = board.getRowInd(testImage.getParent());  
    		   		   		   		
-   		setbCoords(beforeColumn, beforeRow);
+   		bCoords = controller.setbCoords(beforeColumn, beforeRow);
    		
    		testInitialColumn = bCoords[0];
    		testInitialRow = bCoords[1];
@@ -119,14 +88,13 @@ public class DragAndDropTesting {
    		StackPane newImageLocation = (StackPane) controller.getNode(board, 3, 4);   		
    		newImageLocation.getChildren().add(testImage);
    		
-   		// Simulating the move to Column 3, Row 4.
+   		// Simulating a drag event to column 3 and row 4.
    		
-   		fCoords[0] = 3;
-   		fCoords[1] = 4;
+   		fCoords = controller.setfCoords(3, 4);
    		
-   		setaCoords(fCoords[0], fCoords[1]);
+   		aCoords = controller.setaCoords(fCoords[0], fCoords[1]);
    		
-   		calculateMoveDistance();
+   		mCoords = controller.calculateMoveDistance();
    		
    		testMoveColumn = mCoords[0];
    		testMoveRow = mCoords[1];
@@ -148,7 +116,7 @@ public class DragAndDropTesting {
    		 * swap the two image locations.
    		 */
    		
-   		calculateReplaceCoords();
+   		nCoords = controller.calculateReplaceCoords();
    		
    		testReplaceColumn = nCoords[0];
    		testReplaceRow = nCoords[1];
@@ -167,8 +135,10 @@ public class DragAndDropTesting {
    		
    		a2Coords[0] = board.getColumnInd(testImage2.getParent());
    		a2Coords[1] = board.getRowInd(testImage2.getParent());
-   		   		
-   		calculateNewCoords();
+   		
+   		a2Coords = controller.seta2Coords(a2Coords[0], a2Coords[1]);
+   		
+   		newCoords = controller.calculateNewCoords();
    		
    		testFinalColumn = newCoords[0];
    		testFinalRow = newCoords[1];

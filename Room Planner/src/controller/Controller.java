@@ -100,7 +100,7 @@ public class Controller {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		});
+		});	
 	}
 	
     private void addSofaHandling(ActionEvent event){
@@ -315,29 +315,46 @@ public class Controller {
 		}
     }
     
-	public void setbCoords(int column, int row){			
+	public Integer[] setbCoords(int column, int row){			
 		bCoords[0] = column;
 		bCoords[1] = row;	
+		return bCoords;
 	}	
     
-	public void setaCoords(int column, int row){
+	public Integer[] setaCoords(int column, int row){
 		aCoords[0] = column;
 		aCoords[1] = row;		
+		return aCoords;
     }
+	
+	public Integer[] setfCoords(int column, int row){
+		fCoords[0] = column;
+		fCoords[1] = row;
+		return fCoords;
+	}
+	
+	public Integer[] seta2Coords(int column, int row){
+		a2Coords[0] = column;
+		a2Coords[1] = row;
+		return a2Coords;
+	}
     
-	public void calculateMoveDistance(){
+	public Integer[] calculateMoveDistance(){
     	mCoords[0] = aCoords[0] - bCoords[0];
     	mCoords[1] = aCoords[1] - bCoords[1];
+    	return mCoords;
     }
     
-	public void calculateReplaceCoords(){
+	public Integer[] calculateReplaceCoords(){
     	nCoords[0] = fCoords[0] - mCoords[0];
     	nCoords[1] = fCoords[1] - mCoords[1];
+    	return nCoords;
     }
     
-	public void calculateNewCoords(){
+	public Integer[] calculateNewCoords(){
     	newCoords[0] = a2Coords[0] + mCoords[0];
     	newCoords[1] = a2Coords[1] + mCoords[1];
+    	return newCoords;
     }
     
     private void addDragDroppedHandling(DragEvent e){
@@ -354,11 +371,12 @@ public class Controller {
 		}						  			
 					
 		fCoords[0] = board.getColumnInd((Node) e.getSource());
-		fCoords[1] = board.getRowInd((Node) e.getSource());  
-			
+		fCoords[1] = board.getRowInd((Node) e.getSource()); 
+					
 		System.out.println("fColumn: " + fCoords[0] + " fRow: " + fCoords[1]);
 			
 		setaCoords(fCoords[0], fCoords[1]);
+		
 		calculateMoveDistance();	
 		
 		System.out.println("mColumn: " + mCoords[0] + " mRow: " + mCoords[1]);
@@ -456,6 +474,7 @@ public class Controller {
 		}
 	
 	public void singleRotation(){
+		
 		for(ImageView node : group.getGroup()) {   				   							
 			node.setPreserveRatio(true);   					    
 		    node.getStyleClass().remove("highlight");
@@ -466,7 +485,7 @@ public class Controller {
 			Image snapshot = node.snapshot(parameters, null);   	
 			node.setImage(snapshot); 				
 			node.getStyleClass().add("highlight");
-		}
+		}			
 	}
 	
 	public void groupRotation(){
@@ -735,45 +754,51 @@ public class Controller {
     		
     		return images;   		
     	}
-	private void filterArray(ArrayList<String> arr){
+    
+	public ArrayList<String> filterArray(ArrayList<String> arr){
 		
 		ArrayList<String> imageStrings = new ArrayList<String>();
 		ArrayList<Integer> imageRotations = new ArrayList<Integer>();
 		
-		for(String string : arr){
-			if(string.equals("[]")){
-				imageStrings.add(string);
+		for(String node : arr){
+			if(node.equals("[]")){
+				imageStrings.add(node);
 				imageRotations.add(0);
 			}
-			else if(!string.equals("[]") && !string.contains("column") && !string.contains("row")){			
-				String imagename = string.substring(string.lastIndexOf("id=") + 3, string.indexOf(","));
+			else if(!node.equals("[]") && !node.contains("column") && !node.contains("row")){			
+				String imagename = node.substring(node.lastIndexOf("id=") + 3, node.indexOf(","));
 				imageStrings.add(imagename);
 				System.out.println(imagename);
 				imageRotations.add(0);
 			} 
-			else if(string.contains("column")){
-				String column = string.substring(7);
+			else if(node.contains("column")){
+				String column = node.substring(7);
 				imageStrings.add(column);
 			}
-			else if(string.contains("row")){
-				String row = string.substring(4);
+			else if(node.contains("row")){
+				String row = node.substring(4);
 				imageStrings.add(row);
 			}
 		}
 		    		
 		System.out.println(imageStrings);
 		System.out.println(imageRotations);
-		
-		loadBoard(imageStrings, imageRotations);    		
+				
+		return imageStrings;
 	}
+	
 	
 	private void loadFileHandling(ActionEvent event){
-		loadFile();
+		ArrayList<String> loadFile = loadFile("board.txt");
+		ArrayList<String> filteredArray = filterArray(loadFile);
+		loadBoard(filteredArray);
 	}
 	
-	private void loadFile(){
+	public ArrayList<String> loadFile(String file){
+		
 		ArrayList<String> array = new ArrayList<String>();
-		try(BufferedReader br = new BufferedReader(new FileReader("board.txt")))
+		
+		try(BufferedReader br = new BufferedReader(new FileReader(file)))
         {
 
             String sCurrentLine;
@@ -784,11 +809,15 @@ public class Controller {
 
         } catch (IOException e) {
             e.printStackTrace();
-        }   		    		
+        }   	
+		
 		filterArray(array);  
+		
+		return array;
+		
 	}
 	
-	private void loadBoard(ArrayList<String> arr, ArrayList<Integer> ints){
+	public void loadBoard(ArrayList<String> arr){
 		
 		resetBoard();
 		
@@ -808,7 +837,7 @@ public class Controller {
 			for(int y = 0; y < row; y++){
 				StackPane pane = (StackPane) getNode(board, x, y); 
 				String sTemp = arr.get(index);
-				Integer iTemp = ints.get(index);
+			//	Integer iTemp = ints.get(index);
 				if(sTemp.equals("[]")){    					
 				}
 			else{
@@ -819,7 +848,7 @@ public class Controller {
 		      	selectImage(loadImageView);
 		       	hoverImage(loadImageView);
 		       	dragdetected.dragImage(loadImageView);
-		       	loadImageView.setRotate(iTemp);
+		//       	loadImageView.setRotate(iTemp);
 				pane.getChildren().add(loadImageView);
 				}
 				
