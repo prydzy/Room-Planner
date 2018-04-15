@@ -40,8 +40,7 @@ public class AppLoader extends Application {
         scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());                    
         stage.show();
         
-    }
-    
+    }  
 
     public static void main(String[] args) {
         launch(args);

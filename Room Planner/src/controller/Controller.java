@@ -216,7 +216,6 @@ public class Controller {
     private void addFurniture(Image furniture){
     	pallet.addImage(furniture);
     	images = updatePallet();
-    	pallet.getImageView();
     	view.addAll(images);
     }
         
