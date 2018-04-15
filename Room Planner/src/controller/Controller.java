@@ -618,7 +618,7 @@ public class Controller {
     	copyItem();                 	
     }
     
-    private void copyItem(){
+    public ArrayList<StackPane> copyItem(){
     	Board copyGrid = view.getCopyGrid();
     	copyGrid.getChildren().clear();
     	String floor = view.getGrid().getId(); 	
@@ -657,14 +657,15 @@ public class Controller {
             		copyGrid.setId(floor);
             		}
             	}
-    		}   
+    		}
+		return items;   
     	}
     
     	private void deleteItemHandling(ActionEvent event){
     		deleteItem();
     	}	
     	
-    	private void deleteItem(){
+    	public void deleteItem(){
         	boolean clear = false;
         	
         	for(ImageView node : group.getGroup()) {				
@@ -676,7 +677,7 @@ public class Controller {
     		
     		if(clear == true){
     			group.clearGroup();;
-    			}	
+    		}	
     	}
 	
     	private void filterArray(ArrayList<String> arr){
