@@ -6,7 +6,6 @@ import org.junit.Test;
 
 import controller.Controller;
 import javafx.embed.swing.JFXPanel;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import model.Board;
 import model.Group;
@@ -25,19 +24,14 @@ public class AllNodesTesting {
 	 @Test
 	 public void getAllNodesTesting(){
 		 
-		int column = 7;
-		int row = 7;
+		board = view.getGrid();		
+		assertFalse(controller.getAllNodes(board).isEmpty());
 		
-		GridPane grid = new GridPane();
-		board.createBoard(grid, column, row);
-		
-		assertFalse(controller.getAllNodes(grid).isEmpty());
-		
-		grid.getChildren().forEach(i -> {
+		board.getChildren().forEach(i -> {
 			assertTrue(i instanceof StackPane);
 		});
 		
-		int size = grid.getChildren().size();	
+		int size = board.getChildren().size();	
 		assertEquals(size, 49);
 		
 	 }

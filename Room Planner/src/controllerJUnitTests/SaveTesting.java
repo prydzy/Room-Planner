@@ -30,9 +30,6 @@ public class SaveTesting {
 	public void saveBoardTesting(){
 		 
 		board = view.getGrid();	
-		int column = 7;
-		int row = 7;	
-		board.createBoard(board, column, row);		
 			
 		StackPane pane = (StackPane) controller.getNode(board, 0, 1);
 		StackPane pane1 = (StackPane) controller.getNode(board, 2, 3);
@@ -68,10 +65,8 @@ public class SaveTesting {
 		ArrayList<String> save = controller.saveBoard();
 			
 		assertFalse(save.isEmpty());		
-		
-		// 49 Elements * 2, Two Elements per Image. One for the image, one for the rotation values.
-		
-		assertEquals(save.size(), 98);
+				
+		assertEquals(save.size(), 49);
 		
 		save.forEach(i ->{	
 			boolean containsPane = save.contains("[]");

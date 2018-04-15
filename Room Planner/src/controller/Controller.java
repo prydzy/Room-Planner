@@ -719,8 +719,7 @@ public class Controller {
     	createFile("board", save);
     }
     	
-    public ArrayList<String> saveBoard(){
-    		
+    public ArrayList<String> saveBoard(){		
     		board = view.getGrid();
     		
     		ArrayList<StackPane> panes = new ArrayList<>();

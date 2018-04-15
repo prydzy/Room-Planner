@@ -6,7 +6,6 @@ import org.junit.Test;
 
 import controller.Controller;
 import javafx.embed.swing.JFXPanel;
-import javafx.scene.layout.GridPane;
 import model.Board;
 import model.Group;
 import model.Pallet;
@@ -24,12 +23,7 @@ public class BoardRotateTesting {
 	@Test
 	public void boardRotateTesting(){
 		 
-		board = view.getGrid();
-		
-		int column = 7;
-		int row = 7;		
-		GridPane grid = new GridPane();
-		board.createBoard(grid, column, row);		
+		board = view.getGrid();	
 		
 		controller.rotateBoard();
 		

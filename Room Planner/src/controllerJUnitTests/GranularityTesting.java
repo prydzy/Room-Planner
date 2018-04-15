@@ -6,7 +6,6 @@ import org.junit.Test;
 
 import controller.Controller;
 import javafx.embed.swing.JFXPanel;
-import javafx.scene.layout.GridPane;
 import model.Board;
 import model.Group;
 import model.Pallet;
@@ -25,12 +24,7 @@ public class GranularityTesting {
 	 
 	@Test
 	public void granularityTesting(){
-		 		
-		int column = 7;
-		int row = 7;		
-		GridPane grid = new GridPane();
-		board.createBoard(grid, column, row);	
-		
+		 				
 		view.getSlider().setValue(0);	
 		granularityCoords = controller.setGranularity();
 		assertEquals(granularityCoords[0].intValue(), 7);

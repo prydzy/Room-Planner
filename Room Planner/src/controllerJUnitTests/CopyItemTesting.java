@@ -10,7 +10,6 @@ import controller.Controller;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import model.Board;
 import model.Group;
@@ -30,14 +29,11 @@ public class CopyItemTesting {
 	@Test
 	public void copyItemTesting(){
 		 
-		int column = 7;
-		int row = 7;	
-		GridPane grid = new GridPane();
-		board.createBoard(grid, column, row);		
+		board = view.getGrid();
 			
-		StackPane pane = (StackPane) controller.getNode(grid, 5, 2);
-		StackPane pane1 = (StackPane) controller.getNode(grid, 5, 4);
-		StackPane pane2 = (StackPane) controller.getNode(grid, 5, 3);
+		StackPane pane = (StackPane) controller.getNode(board, 5, 2);
+		StackPane pane1 = (StackPane) controller.getNode(board, 5, 4);
+		StackPane pane2 = (StackPane) controller.getNode(board, 5, 3);
 		
 		Image testImage = new Image("file:sofa.png");
 		ImageView testImageView = new ImageView();

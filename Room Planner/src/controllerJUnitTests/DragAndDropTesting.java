@@ -7,7 +7,6 @@ import org.junit.Test;
 import controller.Controller;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import model.Board;
 import model.Group;
@@ -80,17 +79,13 @@ public class DragAndDropTesting {
 		 * 
 		 */
 		 
-		int column = 7;
-		int row = 7;
-		
-		GridPane grid = new GridPane();
-		board.createBoard(grid, column, row);
+		board = view.getGrid();
 		
 		ImageView testImage = new ImageView();
 		ImageView testImage2 = new ImageView();
 		
-		StackPane imageLocation = (StackPane) controller.getNode(grid, 2, 2);
-		StackPane imageLocation2 = (StackPane) controller.getNode(grid, 2, 3);
+		StackPane imageLocation = (StackPane) controller.getNode(board, 2, 2);
+		StackPane imageLocation2 = (StackPane) controller.getNode(board, 2, 3);
 
 		imageLocation.getChildren().add(testImage);
 		imageLocation2.getChildren().add(testImage2);
@@ -121,7 +116,7 @@ public class DragAndDropTesting {
    		 */
    		
    		imageLocation.getChildren().remove(testImage);
-   		StackPane newImageLocation = (StackPane) controller.getNode(grid, 3, 4);   		
+   		StackPane newImageLocation = (StackPane) controller.getNode(board, 3, 4);   		
    		newImageLocation.getChildren().add(testImage);
    		
    		// Simulating the move to Column 3, Row 4.
