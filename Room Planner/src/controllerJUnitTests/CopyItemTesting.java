@@ -29,13 +29,6 @@ public class CopyItemTesting {
 	
 	@Test
 	public void copyItemTesting(){
-		
-		/*
-		 * Have to disable image.setId(image.getImage().impl_getUrl());
-		 * in the Pallet / MakeImageView method to run this test. As
-		 * CopyItem(); can't reference the copied items file location.
-		 * 
-		 */
 		 
 		int column = 7;
 		int row = 7;	
@@ -52,12 +45,12 @@ public class CopyItemTesting {
 		pallet.makeImageView(testImageView);
 		Image testImage1 = new Image("file:rug.png");
 		ImageView testImageView1 = new ImageView();
-		testImageView.setImage(testImage1);
-		pallet.makeImageView(testImageView);
+		testImageView1.setImage(testImage1);
+		pallet.makeImageView(testImageView1);
 		Image testImage2 = new Image("file:tv.png");
 		ImageView testImageView2 = new ImageView();
-		testImageView.setImage(testImage2);
-		pallet.makeImageView(testImageView);
+		testImageView2.setImage(testImage2);
+		pallet.makeImageView(testImageView2);
 				
 		pane.getChildren().add(testImageView);
 		pane1.getChildren().add(testImageView1);
@@ -79,7 +72,13 @@ public class CopyItemTesting {
 			boolean contains = i.getChildren().toString().contains(testClass);	
 			
 			assertTrue(contains);
-						
+			
+			boolean rugContains = i.getChildren().toString().contains("rug.png");
+			boolean sofaContains = i.getChildren().toString().contains("sofa.png");
+			boolean tvContains = i.getChildren().toString().contains("tv.png");
+
+			assertTrue(rugContains || sofaContains || tvContains);
+								
 		});
 		
 		

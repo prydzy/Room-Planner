@@ -42,12 +42,12 @@ public class GroupRotationTesting {
 		pallet.makeImageView(testImageView);
 		Image testImage1 = new Image("file:sofa.png");
 		ImageView testImageView1 = new ImageView();
-		testImageView.setImage(testImage1);
-		pallet.makeImageView(testImageView);
+		testImageView1.setImage(testImage1);
+		pallet.makeImageView(testImageView1);
 		Image testImage2 = new Image("file:sofa.png");
 		ImageView testImageView2 = new ImageView();
-		testImageView.setImage(testImage2);
-		pallet.makeImageView(testImageView);
+		testImageView2.setImage(testImage2);
+		pallet.makeImageView(testImageView2);
 				
 		pane.getChildren().add(testImageView);
 		pane1.getChildren().add(testImageView1);

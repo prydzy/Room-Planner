@@ -661,151 +661,65 @@ public class Controller {
 		return items;   
     	}
     
-    	private void deleteItemHandling(ActionEvent event){
-    		deleteItem();
-    	}	
+    private void deleteItemHandling(ActionEvent event){
+    	deleteItem();
+    }	
     	
-    	public void deleteItem(){
-        	boolean clear = false;
+    public void deleteItem(){
+       	boolean clear = false;
         	
-        	for(ImageView node : group.getGroup()) {				
-    			if(node.getParent() instanceof StackPane){
-    				((StackPane)node.getParent()).getChildren().clear();
-    				clear = true;
-    			}		
-    		}
-    		
-    		if(clear == true){
-    			group.clearGroup();;
-    		}	
+        for(ImageView node : group.getGroup()) {				
+    		if(node.getParent() instanceof StackPane){
+    			((StackPane)node.getParent()).getChildren().clear();
+    			clear = true;
+    		}		
     	}
-	
-    	private void filterArray(ArrayList<String> arr){
     		
-    		ArrayList<String> imageStrings = new ArrayList<String>();
-    		ArrayList<Integer> imageRotations = new ArrayList<Integer>();
-    		
-    		for(String string : arr){
-    			if(string.equals("[]")){
-    				imageStrings.add(string);
-    				imageRotations.add(0);
-    			}
-    			else if(!string.equals("[]") && !string.contains("column") && !string.contains("row")){			
-    				String imagename = string.substring(string.lastIndexOf("id=") + 3, string.indexOf(","));
-    				imageStrings.add(imagename);
-    				System.out.println(imagename);
-    				imageRotations.add(0);
-    			} 
-    			else if(string.contains("column")){
-    				String column = string.substring(7);
-    				imageStrings.add(column);
-    			}
-    			else if(string.contains("row")){
-    				String row = string.substring(4);
-    				imageStrings.add(row);
-    			}
-    		}
-    		    		
-    		System.out.println(imageStrings);
-    		System.out.println(imageRotations);
-    		
-    		loadBoard(imageStrings, imageRotations);    		
-    	}
-    	
-    	private void loadFileHandling(ActionEvent event){
-    		loadFile();
-    	}
-    	
-    	private void loadFile(){
-    		ArrayList<String> array = new ArrayList<String>();
-    		try(BufferedReader br = new BufferedReader(new FileReader("board.txt")))
-            {
-
-                String sCurrentLine;
-
-                while ((sCurrentLine = br.readLine()) != null) {
-                    array.add(sCurrentLine);
-                }
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }   		    		
-    		filterArray(array);  
-    	}
-    	
-    	private void loadBoard(ArrayList<String> arr, ArrayList<Integer> ints){
-    		
-    		resetBoard();
-    		
-    		int column = Integer.parseInt(arr.get(arr.size() - 2));
-    		int row = Integer.parseInt(arr.get(arr.size() - 1));
-    		
-    		arr.remove(arr.size() - 1);
-    		arr.remove(arr.size() - 1);
-    		    		
-    		board = view.getGrid();
-    		
-    		board.createBoard(board, column, row);
-    		
-    		int index = 0;
-    		
-    		for(int x = 0; x < column; x++){
-    			for(int y = 0; y < row; y++){
-    				StackPane pane = (StackPane) getNode(board, x, y); 
-    				String sTemp = arr.get(index);
-    				Integer iTemp = ints.get(index);
-    				if(sTemp.equals("[]")){    					
-    				}
-    				else{
-    					Image loadImage = new Image(sTemp);
-    					ImageView loadImageView = new ImageView();
-    					loadImageView.setImage(loadImage);
-    					pallet.makeImageView(loadImageView);
-    		        	selectImage(loadImageView);
-    		        	hoverImage(loadImageView);
-    		        	dragdetected.dragImage(loadImageView);
-    		        	loadImageView.setRotate(iTemp);
-    					pane.getChildren().add(loadImageView);
-    				}
-    				
-    				index++;
-    				
-    				view.addDragOverHandler(this::addDragOverHandling);
-    				view.addDragDroppedHandler(this::addDragDroppedHandling);
-    		}
-    	}	   		
+    	if(clear == true){
+    		group.clearGroup();;
+    	}	
     }
-
-    	private void createFile(String file, ArrayList<String> arrData)
-                throws IOException {
-            FileWriter writer = new FileWriter(file + ".txt");
-            int size = arrData.size();
-            for (int i=0;i<size;i++) {
-                String str = arrData.get(i).toString();
-                writer.write(str);
-                if(i < size-1)
-                    writer.write("\n");
-            }
-            
-            writer.write("\n");
-            
-            String column = "column=" + Integer.toString(board.getColumn());       
-            String row = "row=" + Integer.toString(board.getRow());
-            
-            writer.write(column);
-            writer.write("\n");
-            writer.write(row);
-            
-            writer.close();
+    	
+    public ArrayList<StackPane> getAllNodes(GridPane board){
+    		
+    	ArrayList<StackPane> nodes = new ArrayList<>();  		
+    	StackPane pane = new StackPane();
+    		
+    	for(Node node : board.getChildren()) {
+    		pane = (StackPane) node;
+    		nodes.add(pane);
+    	}   		
+    	return nodes;  		
+    }
+    	
+    public void createFile(String file, ArrayList<String> arrData) throws IOException {
+    	FileWriter writer = new FileWriter(file + ".txt");
+        int size = arrData.size();
+        for (int i=0;i<size;i++) {
+        	String str = arrData.get(i).toString();
+            writer.write(str);
+            if(i < size-1)
+            	writer.write("\n");
         }
+            
+        writer.write("\n");
+            
+        String column = "column=" + Integer.toString(board.getColumn());       
+        String row = "row=" + Integer.toString(board.getRow());
+            
+        writer.write(column);
+        writer.write("\n");
+        writer.write(row);          
+        writer.close();
+    }
     	
-    	private void saveBoardHandling(ActionEvent event) throws IOException{
-    		board = view.getGrid();
-    		ArrayList<String> save = saveBoard();
-    		createFile("board", save);
-    	}
+    private void saveBoardHandling(ActionEvent event) throws IOException{
+    	board = view.getGrid();
+    	ArrayList<String> save = saveBoard();
+    	createFile("board", save);
+    }
     	
-    	private ArrayList<String> saveBoard(){
+    public ArrayList<String> saveBoard(){
     		
     		board = view.getGrid();
     		
@@ -822,16 +736,99 @@ public class Controller {
     		
     		return images;   		
     	}
-    	
-    	public ArrayList<StackPane> getAllNodes(GridPane board){
-    		
-    		ArrayList<StackPane> nodes = new ArrayList<>();  		
-    		StackPane pane = new StackPane();
-    		
-    		for(Node node : board.getChildren()) {
-    			pane = (StackPane) node;
-    			nodes.add(pane);
-    		}   		
-    		return nodes;  		
-    	}
+	private void filterArray(ArrayList<String> arr){
+		
+		ArrayList<String> imageStrings = new ArrayList<String>();
+		ArrayList<Integer> imageRotations = new ArrayList<Integer>();
+		
+		for(String string : arr){
+			if(string.equals("[]")){
+				imageStrings.add(string);
+				imageRotations.add(0);
+			}
+			else if(!string.equals("[]") && !string.contains("column") && !string.contains("row")){			
+				String imagename = string.substring(string.lastIndexOf("id=") + 3, string.indexOf(","));
+				imageStrings.add(imagename);
+				System.out.println(imagename);
+				imageRotations.add(0);
+			} 
+			else if(string.contains("column")){
+				String column = string.substring(7);
+				imageStrings.add(column);
+			}
+			else if(string.contains("row")){
+				String row = string.substring(4);
+				imageStrings.add(row);
+			}
+		}
+		    		
+		System.out.println(imageStrings);
+		System.out.println(imageRotations);
+		
+		loadBoard(imageStrings, imageRotations);    		
+	}
+	
+	private void loadFileHandling(ActionEvent event){
+		loadFile();
+	}
+	
+	private void loadFile(){
+		ArrayList<String> array = new ArrayList<String>();
+		try(BufferedReader br = new BufferedReader(new FileReader("board.txt")))
+        {
+
+            String sCurrentLine;
+
+            while ((sCurrentLine = br.readLine()) != null) {
+                array.add(sCurrentLine);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }   		    		
+		filterArray(array);  
+	}
+	
+	private void loadBoard(ArrayList<String> arr, ArrayList<Integer> ints){
+		
+		resetBoard();
+		
+		int column = Integer.parseInt(arr.get(arr.size() - 2));
+		int row = Integer.parseInt(arr.get(arr.size() - 1));
+		
+		arr.remove(arr.size() - 1);
+		arr.remove(arr.size() - 1);
+		    		
+		board = view.getGrid();
+		
+		board.createBoard(board, column, row);
+		
+		int index = 0;
+		
+		for(int x = 0; x < column; x++){
+			for(int y = 0; y < row; y++){
+				StackPane pane = (StackPane) getNode(board, x, y); 
+				String sTemp = arr.get(index);
+				Integer iTemp = ints.get(index);
+				if(sTemp.equals("[]")){    					
+				}
+			else{
+				Image loadImage = new Image(sTemp);
+				ImageView loadImageView = new ImageView();
+				loadImageView.setImage(loadImage);
+				pallet.makeImageView(loadImageView);
+		      	selectImage(loadImageView);
+		       	hoverImage(loadImageView);
+		       	dragdetected.dragImage(loadImageView);
+		       	loadImageView.setRotate(iTemp);
+				pane.getChildren().add(loadImageView);
+				}
+				
+				index++;
+				
+				view.addDragOverHandler(this::addDragOverHandling);
+				view.addDragDroppedHandler(this::addDragDroppedHandling);
+			}
+		}	   		
+	}
 }
