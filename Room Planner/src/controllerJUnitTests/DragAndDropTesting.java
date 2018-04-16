@@ -24,7 +24,6 @@ public class DragAndDropTesting {
 	Integer[] bCoords = new Integer[2]; 
 	Integer[] aCoords = new Integer[2];
 	Integer[] mCoords = new Integer[2];
-	Integer[] fCoords = new Integer[2];
 	Integer[] nCoords = new Integer[2];
 	Integer[] a2Coords = new Integer[2];
 	Integer[] newCoords = new Integer[2];
@@ -90,9 +89,9 @@ public class DragAndDropTesting {
    		
    		// Simulating a drag event to column 3 and row 4.
    		
-   		fCoords = controller.setfCoords(3, 4);
+   		aCoords = controller.setaCoords(3, 4);
    		
-   		aCoords = controller.setaCoords(fCoords[0], fCoords[1]);
+   		aCoords = controller.setaCoords(aCoords[0], aCoords[1]);
    		
    		mCoords = controller.calculateMoveDistance();
    		
