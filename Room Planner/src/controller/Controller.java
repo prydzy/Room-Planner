@@ -60,6 +60,13 @@ public class Controller {
 	private Integer[] a2Coords = new Integer[2];
 	private Integer[] newCoords = new Integer[2];
 	private Integer[] granularityCoords = new Integer[2];
+	private ArrayList<Integer> xCoords = new ArrayList<Integer>();
+	private ArrayList<Integer> yCoords = new ArrayList<Integer>();
+	private int xCenter = 0;
+	private int yCenter = 0;
+	private int centerX = 0;
+	private int centerY = 0;
+	private boolean overlap = false;
 	
 	/**
 	 * This initialises the controller with the three models and
@@ -523,15 +530,36 @@ public class Controller {
 					
 		aCoords[0] = board.getColumnInd((Node) e.getSource());
 		aCoords[1] = board.getRowInd((Node) e.getSource()); 
-					
-		System.out.println("aColumn: " + aCoords[0] + " aRow: " + aCoords[1]);
-			
+								
 		setaCoords(aCoords[0], aCoords[1]);
 		
 		calculateMoveDistance();	
-		
-		System.out.println("mColumn: " + mCoords[0] + " mRow: " + mCoords[1]);
-		boolean overlap = false;
+		replaceIfOverLapped();
+			  				
+       	for(ImageView image : group.getGroup()){        
+       		        
+       		a2Coords[0] = board.getColumnInd(image.getParent());
+       		a2Coords[1] = board.getRowInd(image.getParent());
+       		            		
+       		calculateNewCoords();
+       		
+       		if(group.groupSize() > 1){              			
+
+       			if ((a2Coords[0] != aCoords[0] || a2Coords[1] != aCoords[1]) && overlap == false){     		       				       	           				       			
+       				   				 				
+       				StackPane groupMove = (StackPane) getNode(board, newCoords[0], newCoords[1]);
+       				groupMove.getChildren().add(image);
+                  		                	
+               	}          		
+       		}
+       	}      	  	
+    }
+    /**
+     * If the dragged image is placed onto a grouped image then the locations will
+     * swap.
+     */
+    private void replaceIfOverLapped(){
+    	overlap = false;
 		int index = 0;  			
 		board = view.getGrid();
 		for(ImageView image : group.getGroup()){   	
@@ -559,26 +587,6 @@ public class Controller {
        	        }
             }
 		}	
-			  				
-       	for(ImageView image : group.getGroup()){        
-       		        
-       		a2Coords[0] = board.getColumnInd(image.getParent());
-       		a2Coords[1] = board.getRowInd(image.getParent());
-       		     
-    		System.out.println("a2Column: " + a2Coords[0] + " a2Row: " + a2Coords[1]);
-       		
-       		calculateNewCoords();
-       		
-       		if(group.groupSize() > 1){              			
-
-       			if ((a2Coords[0] != aCoords[0] || a2Coords[1] != aCoords[1]) && overlap == false){     		       				       	           				       			
-       				   				 				
-       				StackPane groupMove = (StackPane) getNode(board, newCoords[0], newCoords[1]);
-       				groupMove.getChildren().add(image);
-                  		                	
-               	}          		
-       		}
-       	}      	  	
     }
     /**
      * Returns the node at the specified location on the board.
@@ -659,78 +667,94 @@ public class Controller {
 		
 		board = view.getGrid();	
 		
-		ArrayList<Integer> xCoords = new ArrayList<Integer>();
-		ArrayList<Integer> yCoords = new ArrayList<Integer>();
-			
-		int centerX = 0;
-		int centerY = 0;
-		
-		for(ImageView node : group.getGroup()) {   				   					
-			
-			if(group.groupSize() > 1){
-				
-				int imageColumn = board.getColumnInd(node.getParent());					
-				int imageRow = board.getRowInd(node.getParent());
-				
-				xCoords.add(imageColumn);
-				yCoords.add(imageRow);    							
-							    							
-				System.out.println("Rotated Image Column: " + imageColumn + " Row: " + imageRow);
-							
-				}    						      				     				
-			}    			
-				
-			if(group.groupSize() > 1){
-					    				
-    			int xCenter = (xCoords.size() + 1) / 2;
-    			int yCenter = (yCoords.size() + 1) / 2;		
-    			
-        		centerX = xCoords.get(xCenter);
-        		centerY = yCoords.get(yCenter); 		
-    							     				       				   	
-    			System.out.println("Center Axis Column: " + centerX + " Row: " + centerY);
-    				
-			}
+		xCoords.clear();
+		yCoords.clear();
+		 						
+		getAllCoordinates();
+		calculateCenterAxis();
 			    				     		   				   				    				    				
-			for(ImageView node : group.getGroup()){
-					   					
+		for(ImageView node : group.getGroup()){
+				
+			if(node.getParent() instanceof StackPane){
 				if(group.groupSize() > 1){
-					
+						
 					int imageColumn = board.getColumnInd(node.getParent());
 					int imageRow = board.getRowInd(node.getParent());
 					
 					int dx = centerX - imageColumn;
 					int dy = centerY - imageRow;
-							
+								
 					int newPosX = 0;
 					int newPosY = 0;		
-							
+								
 					newPosX = centerX + dy;
 					newPosY = centerY - dx;			
-							
+								
 					if(newPosX < 0){
 						newPosX = 1;
 					} else if(newPosX > (board.getColumn() - 1)){
 						newPosX = board.getColumn() - 2;
 					}
-					
+						
 					if(newPosY < 0){
 						newPosY = 1;
 					} else if(newPosY > (board.getRow() - 1)){
 						newPosY = board.getRow() - 2;
 					}
-					
-	                StackPane groupMove = (StackPane) getNode(board, newPosX, newPosY);
-	                   	                    
-	                groupMove.getChildren().remove(node);                        			
-	                groupMove.getChildren().add(node);   											    																							
-				}				
+						
+		            StackPane groupMove = (StackPane) getNode(board, newPosX, newPosY);
+		                   	                    
+		            groupMove.getChildren().remove(node);                        			
+		            groupMove.getChildren().add(node);   											    																							
+					}	
+				}				 			
 			} 	 
 	}
+	/**
+	 * Calculate the coordinates of all the images inside the group.
+	 */
+	private void getAllCoordinates(){
+		for(ImageView node : group.getGroup()) {   	
+			if(node.getParent() instanceof StackPane){
+				if(group.groupSize() > 1){
+					
+					int imageColumn = board.getColumnInd(node.getParent());					
+					int imageRow = board.getRowInd(node.getParent());
+					
+					xCoords.add(imageColumn);
+					yCoords.add(imageRow);    							
+								    							
+					System.out.println("Rotated Image Column: " + imageColumn + " Row: " + imageRow);						
+				}   	
+			} 						      				     				
+		}   
+	}
+	/**
+	 * Calculates the center axis for group rotation. All other images
+	 * rotate around this axis.
+	 */
+	private void calculateCenterAxis(){
+		group.getGroup().forEach(i -> {
+			if(i.getParent() instanceof StackPane){
+				if(group.groupSize() > 1){
+    				
+	    			xCenter = (xCoords.size() + 1) / 2;
+	    			yCenter = (yCoords.size() + 1) / 2;		
+	    			
+	        		centerX = xCoords.get(xCenter);
+	        		centerY = yCoords.get(yCenter); 		
+	    							     				       				   	
+	    			System.out.println("Center Axis Column: " + centerX + " Row: " + centerY); 				
+				}
+			}
+		});
+	}
+	
 	/**
 	 * Rotation handling attaching the single rotation and grouped rotation together.
 	 * @param event action event
 	 */
+	
 	private void addRotationHandling(ActionEvent event){
 		
 		singleRotation();
@@ -769,6 +793,7 @@ public class Controller {
     	System.out.println("Board Cleared");
     	board = view.getGrid();
     	board.deleteBoard();
+    	group.clearGroup();
     }
     /**
      * Sets the granularity, recreates the board and attaches the drag and drop handlers.

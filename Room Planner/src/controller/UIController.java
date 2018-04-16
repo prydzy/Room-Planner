@@ -2,12 +2,16 @@ package controller;
 
 import javafx.event.ActionEvent;
 import model.Board;
+import model.Group;
+import model.Pallet;
 import view.BuildUI;
 
 public class UIController{
 		
 	private BuildUI view;
 	private Board board;
+	private Group group;
+	private Pallet pallet;
 	
 	public UIController(BuildUI view, Board board){
 		this.view = view;
