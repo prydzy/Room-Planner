@@ -1012,10 +1012,12 @@ public class Controller {
 				imageStrings.add(node);
 				imageRotations.add(0);
 			}
+			else if(node.contains("null")){
+				imageStrings.add("[]");
+			}
 			else if(!node.equals("[]") && !node.contains("column") && !node.contains("row")){			
 				String imagename = node.substring(node.lastIndexOf("id=") + 3, node.indexOf(","));
 				imageStrings.add(imagename);
-				System.out.println(imagename);
 				imageRotations.add(0);
 			} 
 			else if(node.contains("column")){
