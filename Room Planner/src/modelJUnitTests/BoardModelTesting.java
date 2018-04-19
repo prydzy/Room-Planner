@@ -11,7 +11,10 @@ import model.Board;
 
 public class BoardModelTesting {
 
-	Board test = new Board();
+	protected Board test = new Board();
+	protected int testcolumn = 7;
+	protected int testrow = 7;
+	
 	
 	@Test
 	public void boardTest(){
@@ -24,16 +27,14 @@ public class BoardModelTesting {
 	
 	@Test
 	public void columnTest() {
-		int testColumn = 7;
-		test.setColumn(testColumn);
+		test.setColumn(testcolumn);
 		int column = test.getColumn();
 		assertEquals(7, column);
 	}
 
 	@Test
 	public void rowTest() {
-		int testRow = 7;
-		test.setRow(testRow);
+		test.setRow(testrow);
 		int row = test.getRow();
 		assertEquals(7, row);
 	}
@@ -56,48 +57,38 @@ public class BoardModelTesting {
 	
 	@Test	
 	public void createBoardIsEmptyTest(){
-		int column = 7;
-		int row = 7;
 		GridPane board = new GridPane();
-		test.createBoard(board, column, row);
+		test.createBoard(board, testcolumn, testrow);
 		boolean isBoard = board.getChildren().isEmpty();
 		assertFalse(isBoard);
 	}
 	
 	@Test
 	public void createBoardGetBoardTest(){
-		int column = 7;
-		int row = 7;
 		GridPane board = new GridPane();
-		test.createBoard(board, column, row);
+		test.createBoard(board, testcolumn, testrow);
 		assertEquals(test.getBoard(), board);
 	}
 	
 	@Test
 	public void createBoardRowAndColumnTest(){
-		int column = 7;
-		int row = 7;
 		GridPane board = new GridPane();
-		test.createBoard(board, column, row);
+		test.createBoard(board, testcolumn, testrow);
 		assertEquals(test.getColumn(), 7);
 		assertEquals(test.getRow(), 7);
 	}
 	
 	@Test
 	public void getBoardIDTest(){
-		int column = 7;
-		int row = 7;
 		GridPane board = new GridPane();
-		test.createBoard(board, column, row);
+		test.createBoard(board, testcolumn, testrow);
 		assertEquals(board.getId(), "wood");
 	}
 	
 	@Test
 	public void deleteBoardTest(){
-		int column = 7;
-		int row = 7;
 		GridPane board = new GridPane();
-		test.createBoard(board, column, row);
+		test.createBoard(board, testcolumn, testrow);
 		test.deleteBoard();
 		assertTrue(board.getChildren().isEmpty());
 	}

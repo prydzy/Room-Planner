@@ -11,6 +11,8 @@ import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.SnapshotParameters;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
@@ -416,9 +418,9 @@ public class Controller {
      * @param e The drag event.
      */
     private void addDragOverHandling(DragEvent e){   	
-    		Dragboard dImage = e.getDragboard(); //dImage is the dragboard being dragged
-    		if(dImage.hasContent(imageFormat) && draggingImage != null) { // if the selected image is being dragged and isn't null
-    			e.acceptTransferModes(TransferMode.MOVE); //Accepts the moving transfermode of the drag
+    		Dragboard dImage = e.getDragboard(); 
+    		if(dImage.hasContent(imageFormat) && draggingImage != null) { 
+    			e.acceptTransferModes(TransferMode.MOVE); 
     		}	
     }
     /**
@@ -946,25 +948,39 @@ public class Controller {
      * @throws IOException if the saving is interrupted or failed.
      */
     public void createFile(String file, ArrayList<String> arrData) throws IOException {
-    	FileWriter writer = new FileWriter(file + ".txt");
-        int size = arrData.size();
-        for (int i=0;i<size;i++) {
-        	String str = arrData.get(i).toString();
-            writer.write(str);
-            if(i < size-1)
-            	writer.write("\n");
-        }
-            
-        writer.write("\n");
-            
-        String column = "column=" + Integer.toString(board.getColumn());       
-        String row = "row=" + Integer.toString(board.getRow());
-            
-        writer.write(column);
-        writer.write("\n");
-        writer.write(row);          
-        writer.close();
+    	
+    	try(FileWriter writer = new FileWriter(file + ".txt")){
+            int size = arrData.size();
+            for (int i=0;i<size;i++) {
+            	String str = arrData.get(i).toString();
+                writer.write(str);
+                if(i < size-1)
+                	writer.write("\n");
+            }
+                
+            writer.write("\n");
+                
+            String column = "column=" + Integer.toString(board.getColumn());       
+            String row = "row=" + Integer.toString(board.getRow());
+                
+            writer.write(column);
+            writer.write("\n");
+            writer.write(row);          
+            writer.close();
+            alertDialogBuilder("Save Success", "Board Successfully Saved");
+    	}
+    	catch (IOException error){
+    		alertDialogBuilder("Error Saving", error.toString());
+    	}      
     }
+    
+	private void alertDialogBuilder(String title, String text) {
+		Alert alert = new Alert(AlertType.INFORMATION);
+    	alert.setTitle(title);
+    	alert.setContentText(text);
+    	alert.showAndWait();
+	}
+    
     /**
      * Save Board handling populates an array and passes it to createFile.
      * @param event action event
@@ -1063,9 +1079,9 @@ public class Controller {
             while ((sCurrentLine = br.readLine()) != null) {
                 array.add(sCurrentLine);
             }
-
-        } catch (IOException e) {
-            e.printStackTrace();
+            alertDialogBuilder("Load Success", "Board Successfully Loaded");
+        } catch (IOException error) {
+        	alertDialogBuilder("Error Loading", error.toString());
         }   	
 				
 		return array;

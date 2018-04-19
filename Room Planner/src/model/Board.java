@@ -114,6 +114,7 @@ public class Board extends GridPane {
 			}
 		}		
 	}
+	
 	/**
 	 * Initialises a new StackPane and sets it layout and
 	 * style.

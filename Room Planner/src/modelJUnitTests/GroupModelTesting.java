@@ -12,18 +12,20 @@ import model.Group;
 
 public class GroupModelTesting {
 
-	Group test = new Group();
+	protected Group test = new Group();
+	protected ImageView node = new ImageView();
+	protected ImageView node1 = new ImageView();
+	protected ImageView node2 = new ImageView();
 	
 	@Test
 	public void groupTest() {
 		Set<ImageView> group = new HashSet<>();
 		test.setGroup(group);
-		assertSame(test.getGroup(), group);
+		assertEquals(test.getGroup(), group);
 	}
 	
 	@Test
 	public void addItemTest(){
-		ImageView node = new ImageView();
 		test.addItem(node);
 		assertTrue(test.getGroup().contains(node));
 		assertTrue(node.getStyleClass().contains("highlight"));
@@ -32,7 +34,6 @@ public class GroupModelTesting {
 	
 	@Test
 	public void removeItemTest(){
-		ImageView node = new ImageView();
 		test.addItem(node);
 		test.removeItem(node);
 		assertFalse(test.getGroup().contains(node));
@@ -42,7 +43,6 @@ public class GroupModelTesting {
 	
 	@Test
 	public void clearGroupTest(){
-		ImageView node = new ImageView();
 		test.addItem(node);
 		test.clearGroup();
 		assertTrue(test.getGroup().isEmpty());
@@ -50,14 +50,12 @@ public class GroupModelTesting {
 	
 	@Test
 	public void groupContainsTest(){
-		ImageView node = new ImageView();
 		test.addItem(node);
 		assertTrue(test.groupContains(node));
 	}
 	
 	@Test
 	public void groupDoesntContainTest(){
-		ImageView node = new ImageView();
 		test.addItem(node);
 		test.removeItem(node);
 		assertFalse(test.groupContains(node));
@@ -65,9 +63,6 @@ public class GroupModelTesting {
 
 	@Test
 	public void groupSizeTest(){
-		ImageView node = new ImageView();
-		ImageView node1 = new ImageView();
-		ImageView node2 = new ImageView();
 		test.addItem(node);
 		test.addItem(node1);
 		test.addItem(node2);
