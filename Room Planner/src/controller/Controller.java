@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Optional;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -13,6 +14,7 @@ import javafx.scene.Node;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
@@ -782,11 +784,20 @@ public class Controller {
 	 * @param event action event
 	 */
 	private void clearBoardHandling(ActionEvent event){
-		resetBoard();
-		board = view.getGrid();
-		board.createBoard(board, board.getColumn(), board.getRow());
-		view.addDragOverHandler(this::addDragOverHandling);
-		view.addDragDroppedHandler(this::addDragDroppedHandling);
+		
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setHeaderText("Confirm Reset");
+		alert.setContentText("Are you sure you want to reset the board?");
+		
+		Optional<ButtonType> result = alert.showAndWait();
+		
+		if(result.get() == ButtonType.OK){
+			resetBoard();
+			board = view.getGrid();
+			board.createBoard(board, board.getColumn(), board.getRow());
+			view.addDragOverHandler(this::addDragOverHandling);
+			view.addDragDroppedHandler(this::addDragDroppedHandling);
+		}
 	}
 	/**
 	 * Delete all child elements of the board.
@@ -802,14 +813,23 @@ public class Controller {
      * @param event mouse event
      */
 	private void addSliderHandling(MouseEvent event){
-		board = view.getGrid();
 		
-		setGranularity();		
-		resetBoard();
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setHeaderText("This Will Reset The Board");
+		alert.setContentText("Are you sure you want to reset the board?");
 		
-		board.createBoard(board, granularityCoords[0], granularityCoords[1]);	
-		view.addDragOverHandler(this::addDragOverHandling);
-		view.addDragDroppedHandler(this::addDragDroppedHandling);
+		Optional<ButtonType> result = alert.showAndWait();
+		
+		if(result.get() == ButtonType.OK){
+			board = view.getGrid();
+			
+			setGranularity();		
+			resetBoard();
+			
+			board.createBoard(board, granularityCoords[0], granularityCoords[1]);	
+			view.addDragOverHandler(this::addDragOverHandling);
+			view.addDragDroppedHandler(this::addDragDroppedHandling);
+		}
 	}
 	/**
 	 * Sets the granularity of the board based on the slider value located on the view.
@@ -976,7 +996,7 @@ public class Controller {
     
 	private void alertDialogBuilder(String title, String text) {
 		Alert alert = new Alert(AlertType.INFORMATION);
-    	alert.setTitle(title);
+    	alert.setHeaderText(title);
     	alert.setContentText(text);
     	alert.showAndWait();
 	}

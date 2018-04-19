@@ -20,7 +20,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
-
+import javafx.scene.text.Text;
 import model.Board;
 
 /**
@@ -93,6 +93,8 @@ public class BuildUI {
     private Label granLabel = new Label("Modify Granularity (Warning, Resets Board)");
     private int defaultColumn = 7;
     private int defaultRow = 7;
+    private Text instructions = new Text();
+    
     /**
      * This constructs the user interface and by default sets the layouts
      * for the room category panes, the floor, the pallet and the buttons.
@@ -169,7 +171,12 @@ public class BuildUI {
         granularity.setMinorTickCount(0);
         granularity.setShowTickLabels(true);
         granularity.setShowTickMarks(true);
-        granularity.setSnapToTicks(true);         
+        granularity.setSnapToTicks(true);       
+        
+        instructions.setText("Shift + Click - Add Selection \n"
+        		+ "Ctrl  + Click - Remove Selection \n"
+        		+ "ScrollUp - Increase Image Size \n"
+        		+ "ScrollDown - Decrease Image Size");
         
 	}
 
@@ -223,7 +230,7 @@ public class BuildUI {
     	saveButtons.getChildren().addAll(saveButton, loadButton);
         granBox.getChildren().addAll(granularity, granLabel);     
         leftbuttons.getChildren().addAll(clearBtn, furniture, rooms);        
-        middleButtons.getChildren().addAll(rotateBtn, copyBtn, deleteBtn);
+        middleButtons.getChildren().addAll(rotateBtn, copyBtn, deleteBtn, instructions);
         rightButtons.getChildren().addAll(clearboardBtn, rotateboardBtn, gridLines, wood, stone, marble, saveButtons, granBox, copyBoard);  
     	box.getChildren().addAll(leftbuttons, scroll, middleButtons, board, rightButtons);
     	
