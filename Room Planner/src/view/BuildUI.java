@@ -175,8 +175,8 @@ public class BuildUI {
         
         instructions.setText("Shift + Click - Add Selection \n"
         		+ "Ctrl  + Click - Remove Selection \n"
-        		+ "ScrollUp - Increase Image Size \n"
-        		+ "ScrollDown - Decrease Image Size");
+        		+ "ScrollUp - Increase Furniture Size \n"
+        		+ "ScrollDown - Decrease Furniture Size");
         
 	}
 

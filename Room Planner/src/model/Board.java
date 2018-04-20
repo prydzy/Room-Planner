@@ -141,7 +141,7 @@ public class Board extends GridPane {
 	
 	public Node getNode(int col, int row){
 		for(Node node : board.getChildren()) {
-			if(GridPane.getColumnIndex(node) == col && GridPane.getRowIndex(node) == row) {
+			if(getColumnInd(node) == col && getRowInd(node) == row) {
 				return node;
 			}
 		}
@@ -156,7 +156,8 @@ public class Board extends GridPane {
 	
     public ArrayList<StackPane> getAllNodes(){
 		
-    	ArrayList<StackPane> nodes = new ArrayList<>();  		
+    	ArrayList<StackPane> nodes = new ArrayList<>();  	
+    	
     	StackPane pane = new StackPane();
     		
     	for(Node node : board.getChildren()) {

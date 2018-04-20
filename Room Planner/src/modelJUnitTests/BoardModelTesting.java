@@ -8,13 +8,13 @@ import javafx.geometry.Insets;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import model.Board;
+import view.BuildUI;
 
 public class BoardModelTesting {
 
 	protected Board test = new Board();
 	protected int testcolumn = 7;
 	protected int testrow = 7;
-	
 	
 	@Test
 	public void boardTest(){
@@ -105,4 +105,37 @@ public class BoardModelTesting {
 		assertEquals(prefWidth, 150);
 		assertEquals(prefHeight, 150);
 	}
+	
+	 @Test
+	 public void getAllNodesTesting(){
+		test.createBoard(test, testcolumn, testrow);		
+		assertFalse(test.getAllNodes().isEmpty());
+		
+		test.getChildren().forEach(i -> {
+			assertTrue(i instanceof StackPane);
+		});
+		
+		int size = test.getChildren().size();	
+		assertEquals(size, 49);
+		
+	 }
+	 
+		@Test
+		public void getNodeTesting(){		
+			test.createBoard(test, testcolumn, testrow);		
+			StackPane pane = (StackPane) test.getNode(5, 3);
+				
+			assertFalse(pane.equals(null));
+			assertTrue(pane instanceof StackPane);
+				
+			int paneColumn = GridPane.getColumnIndex(pane);
+			int paneRow = GridPane.getRowIndex(pane);
+			
+			assertEquals(paneColumn, 5);
+			assertEquals(paneRow, 3);
+				
+			assertNull(test.getNode(10, 10));		
+			assertNotNull(test.getNode(4, 4));
+		}
+	 
 }
