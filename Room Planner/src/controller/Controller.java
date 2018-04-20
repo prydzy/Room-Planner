@@ -51,7 +51,7 @@ public class Controller {
 
 	private BuildUI view;
 	private Pallet pallet;
-	private ImageView[] images;
+	private ImageView images;
 	private Board board;
 	private Group group;
     private final DataFormat imageFormat = new DataFormat("MyImage");
@@ -327,19 +327,17 @@ public class Controller {
      * hovered and selected.
      * @return The image to be added to the pallet.
      */
-    private ImageView[] updatePallet() {
+    private ImageView updatePallet() {
     	
     	System.out.println("Pallet Updated");
-        images = new ImageView[pallet.size()];
-        
-        for (int j = 0; j < images.length; j++) {
-        	images[j] = new ImageView(pallet.getAllImages().get(j));
-        	pallet.makeImageView(images[j]);
-        	selectImage(images[j]);
-        	hoverImage(images[j]);
-        	dragdetected.dragImage(images[j]);
-        }     
-        
+        images = new ImageView(); 
+      //  for (int j = 0; j < images.length; j++) {
+        	images = new ImageView(pallet.getAllImages().get(0));
+        	pallet.makeImageView(images);
+        	selectImage(images);
+        	hoverImage(images);
+        	dragdetected.dragImage(images);
+     //   }     
         pallet.clear();
 		return images;     
 		
@@ -652,15 +650,16 @@ public class Controller {
 	public void singleRotation(){
 		
 		for(ImageView node : group.getGroup()) {   				   							
-			node.setPreserveRatio(true);   					    
+			node.setPreserveRatio(true);   				
 		    node.getStyleClass().remove("highlight");
 			System.out.println("rotating image");
 			SnapshotParameters parameters = new SnapshotParameters();
 			parameters.setFill(Color.TRANSPARENT);
 			parameters.setTransform(new Rotate(90, node.getFitHeight() / 2, node.getFitWidth() / 2));  			
-			Image snapshot = node.snapshot(parameters, null);   	
+			Image snapshot = node.snapshot(parameters, null);  
 			node.setImage(snapshot); 				
 			node.getStyleClass().add("highlight");
+			System.out.println(node.getId());
 		}			
 	}
 	/**
@@ -888,23 +887,24 @@ public class Controller {
     		
             StackPane newPane = board.makePane();    		
     		ImageView copiedItem = new ImageView();
+    		String url = item.getId();
     		copiedItem.setImage(item.getImage());
+    		
     		
     		pallet.makeImageView(copiedItem);
         	selectImage(copiedItem);
         	hoverImage(copiedItem);
         	dragdetected.dragImage(copiedItem);
+        	copiedItem.setId(url);
         	
     		copiedItem.setFitHeight(item.getFitHeight());
     		copiedItem.setFitWidth(item.getFitWidth());
 		   		        	
             newPane.getChildren().add(copiedItem);       
-            items.add(newPane);
-    		
+            items.add(newPane);		
     	}     
 
-    	int arraySize = items.size();  
-    	
+    	int arraySize = items.size();   	
     	int count = 0;      	      
 
         for (int x = 0; x < (items.size()); x++){

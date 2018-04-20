@@ -338,7 +338,7 @@ public class BuildUI {
      * This adds all the images to the ImgBox which is the pallet.
      * @param image The images to be added.
      */
-    public void addAll(ImageView[] image){
+    public void addAll(ImageView image){
     	imgBox.getChildren().addAll(image);
     }
     /**
