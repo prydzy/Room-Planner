@@ -31,9 +31,9 @@ public class SaveTesting {
 		 
 		board = view.getGrid();	
 			
-		StackPane pane = (StackPane) controller.getNode(board, 0, 1);
-		StackPane pane1 = (StackPane) controller.getNode(board, 2, 3);
-		StackPane pane2 = (StackPane) controller.getNode(board, 3, 1);
+		StackPane pane = (StackPane) board.getNode(0, 1);
+		StackPane pane1 = (StackPane) board.getNode(2, 3);
+		StackPane pane2 = (StackPane) board.getNode(3, 1);
 
 		String sofaString = "file:sofa.png";
 		String rugString = "file:rug.png";

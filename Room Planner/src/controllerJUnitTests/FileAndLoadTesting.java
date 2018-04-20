@@ -74,7 +74,7 @@ public class FileAndLoadTesting {
 		assertEquals(board.getRow(), 7);
 		assertFalse(board.getChildren().isEmpty());
 				
-		ArrayList<StackPane> panes = controller.getAllNodes(board);
+		ArrayList<StackPane> panes = board.getAllNodes();
 		
 		panes.forEach(i -> {	
 			

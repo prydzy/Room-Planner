@@ -25,7 +25,7 @@ public class AllNodesTesting {
 	 public void getAllNodesTesting(){
 		 
 		board = view.getGrid();		
-		assertFalse(controller.getAllNodes(board).isEmpty());
+		assertFalse(board.getAllNodes().isEmpty());
 		
 		board.getChildren().forEach(i -> {
 			assertTrue(i instanceof StackPane);
@@ -36,9 +36,3 @@ public class AllNodesTesting {
 		
 	 }
 }
-
-/*
- * 
- * SEPERATE EVENTS FROM METHODS IN THE CONTROLLER SO THAT YOU CAN TEST THEM!
- * 
- * */

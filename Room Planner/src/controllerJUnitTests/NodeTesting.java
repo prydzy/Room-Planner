@@ -30,7 +30,7 @@ public class NodeTesting {
 		
 		GridPane grid = new GridPane();
 		board.createBoard(grid, column, row);		
-		StackPane pane = (StackPane) controller.getNode(grid, 5, 3);
+		StackPane pane = (StackPane) board.getNode(5, 3);
 			
 		assertFalse(pane.equals(null));
 		assertTrue(pane instanceof StackPane);
@@ -41,7 +41,7 @@ public class NodeTesting {
 		assertEquals(paneColumn, 5);
 		assertEquals(paneRow, 3);
 			
-		assertNull(controller.getNode(grid, 10, 10));		
-		assertNotNull(controller.getNode(grid, 4, 4));
+		assertNull(board.getNode(10, 10));		
+		assertNotNull(board.getNode(4, 4));
 	}
 }

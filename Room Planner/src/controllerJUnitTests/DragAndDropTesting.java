@@ -52,8 +52,8 @@ public class DragAndDropTesting {
 		ImageView testImage = new ImageView();
 		ImageView testImage2 = new ImageView();
 		
-		StackPane imageLocation = (StackPane) controller.getNode(board, 2, 2);
-		StackPane imageLocation2 = (StackPane) controller.getNode(board, 2, 3);
+		StackPane imageLocation = (StackPane) board.getNode(2, 2);
+		StackPane imageLocation2 = (StackPane) board.getNode(2, 3);
 
 		imageLocation.getChildren().add(testImage);
 		imageLocation2.getChildren().add(testImage2);
@@ -84,7 +84,7 @@ public class DragAndDropTesting {
    		 */
    		
    		imageLocation.getChildren().remove(testImage);
-   		StackPane newImageLocation = (StackPane) controller.getNode(board, 3, 4);   		
+   		StackPane newImageLocation = (StackPane) board.getNode(3, 4);   		
    		newImageLocation.getChildren().add(testImage);
    		
    		// Simulating a drag event to column 3 and row 4.

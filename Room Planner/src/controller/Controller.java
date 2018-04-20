@@ -24,7 +24,6 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.input.TransferMode;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -536,7 +535,10 @@ public class Controller {
 		setaCoords(aCoords[0], aCoords[1]);
 		
 		calculateMoveDistance();	
+		
 		replaceIfOverLapped();
+		
+		board = view.getGrid();
 			  				
        	for(ImageView image : group.getGroup()){        
        		        
@@ -549,7 +551,11 @@ public class Controller {
 
        			if ((a2Coords[0] != aCoords[0] || a2Coords[1] != aCoords[1]) && overlap == false){     		       				       	           				       			
        				   				 				
-       				StackPane groupMove = (StackPane) getNode(board, newCoords[0], newCoords[1]);
+       			//	StackPane groupMove = (StackPane) getNode(board, newCoords[0], newCoords[1]);
+       				
+           			StackPane groupMove = (StackPane) board.getNode(newCoords[0], newCoords[1]);
+
+       				
        				groupMove.getChildren().add(image);
                   		                	
                	}          		
@@ -572,14 +578,20 @@ public class Controller {
        					
        	        if(group.groupSize() > 1){ 
        	               		   	
-       				StackPane multipleImage = (StackPane) getNode(board, aCoords[0], aCoords[1]);
-       	   	               		               	        	
+       		//		StackPane multipleImage = (StackPane) getNode(board, aCoords[0], aCoords[1]);
+       	   	           
+       				StackPane multipleImage = (StackPane) board.getNode(aCoords[0], aCoords[1]);
+
+       	        	
        	   	        if(multipleImage.getChildren().contains(image)){
        	   	               			
        	   	        	calculateReplaceCoords();
        	   	               		
-       	   	            StackPane splitPane = ((StackPane) getNode(board, nCoords[0], nCoords[1])); 
-       	   	            splitPane.getChildren().remove(multipleImage.getChildren().get(0));
+       	   	     //       StackPane splitPane = ((StackPane) getNode(board, nCoords[0], nCoords[1])); 
+       	   	            StackPane splitPane = ((StackPane) board.getNode(nCoords[0], nCoords[1])); 
+
+       	   	        	
+       	   	        	splitPane.getChildren().remove(multipleImage.getChildren().get(0));
        	   	            splitPane.getChildren().add(multipleImage.getChildren().get(0));      	
        	   	               		
                         overlap = true;                         		
@@ -590,22 +602,6 @@ public class Controller {
             }
 		}	
     }
-    /**
-     * Returns the node at the specified location on the board.
-     * @param board The board to be searched
-     * @param col The column number to search
-     * @param row The row number to look search
-     * @return The node that is located, or null if none present.
-     */
-	public Node getNode(GridPane board, int col, int row){
-		
-		for(Node node : board.getChildren()) {
-			if(GridPane.getColumnIndex(node) == col && GridPane.getRowIndex(node) == row) {
-				return node;
-			}
-		}
-		return null;
-	}
 	/**
 	 * Allows images to be increased and decreased in size through the scroll wheel. Upper bound of 150 and lower bound of 50.
 	 * @param event Scroll event
@@ -705,8 +701,10 @@ public class Controller {
 						newPosY = board.getRow() - 2;
 					}
 						
-		            StackPane groupMove = (StackPane) getNode(board, newPosX, newPosY);
-		                   	                    
+		       //     StackPane groupMove = (StackPane) getNode(board, newPosX, newPosY);
+		         
+		            StackPane groupMove = (StackPane) board.getNode(newPosX, newPosY);
+					
 		            groupMove.getChildren().remove(node);                        			
 		            groupMove.getChildren().add(node);   											    																							
 					}	
@@ -751,18 +749,14 @@ public class Controller {
 				}
 			}
 		});
-	}
-	
+	}	
 	/**
 	 * Rotation handling attaching the single rotation and grouped rotation together.
 	 * @param event action event
 	 */
-	
-	private void addRotationHandling(ActionEvent event){
-		
+	private void addRotationHandling(ActionEvent event){	
 		singleRotation();
-		groupRotation();
-			 		
+		groupRotation();	 		
 	}	    
 	/**
 	 * Rotate board handling
@@ -945,22 +939,6 @@ public class Controller {
     	}	
     }
     /**
-     * Returns all nodes that are located in the board/grid pane.
-     * @param board The board to search.
-     * @return all the nodes on the board.
-     */
-    public ArrayList<StackPane> getAllNodes(GridPane board){
-    		
-    	ArrayList<StackPane> nodes = new ArrayList<>();  		
-    	StackPane pane = new StackPane();
-    		
-    	for(Node node : board.getChildren()) {
-    		pane = (StackPane) node;
-    		nodes.add(pane);
-    	}   		
-    	return nodes;  		
-    }
-    /**
      * Creates a file where each element on the board is stored in a new line as a string. 
      * Column and Row numbers from the board are stored at the end of the file.
      * @param file The name of the file to be created
@@ -1016,13 +994,13 @@ public class Controller {
      * either blank or containing an image. Elements are stored as a string.
      * @return the ArrayList of stack pane contents in string format
      */
-    public ArrayList<String> saveBoard(){		
+    public ArrayList<String> saveBoard(){	
     	board = view.getGrid();
     		
     	ArrayList<StackPane> panes = new ArrayList<>();
     	ArrayList<String> images = new ArrayList<>();
     		
-    	panes = getAllNodes(board);
+    	panes = board.getAllNodes();
     		
     	panes.forEach(i -> {
     		images.add(i.getChildren().toString());
@@ -1132,8 +1110,8 @@ public class Controller {
 		int index = 0;
 		
 		for(int x = 0; x < column; x++){
-			for(int y = 0; y < row; y++){
-				StackPane pane = (StackPane) getNode(board, x, y); 
+			for(int y = 0; y < row; y++){				
+				StackPane pane = (StackPane) board.getNode(x, y); 			
 				String sTemp = arr.get(index);
 			//	Integer iTemp = ints.get(index);
 				if(sTemp.equals("[]")){    					

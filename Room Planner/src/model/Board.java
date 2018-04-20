@@ -1,5 +1,7 @@
 package model;
 
+import java.util.ArrayList;
+
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.layout.GridPane;
@@ -128,4 +130,40 @@ public class Board extends GridPane {
 		pane.setPadding(new Insets(5, 5, 5, 5));
         return pane;
 	}
+	
+    /**
+     * Returns the node at the specified location on the board.
+     * @param board The board to be searched
+     * @param col The column number to search
+     * @param row The row number to look search
+     * @return The node that is located, or null if none present.
+     */
+	
+	public Node getNode(int col, int row){
+		for(Node node : board.getChildren()) {
+			if(GridPane.getColumnIndex(node) == col && GridPane.getRowIndex(node) == row) {
+				return node;
+			}
+		}
+		return null;
+	}
+	
+    /**
+     * Returns all nodes that are located in the board/grid pane.
+     * @param board The board to search.
+     * @return all the nodes on the board.
+     */
+	
+    public ArrayList<StackPane> getAllNodes(){
+		
+    	ArrayList<StackPane> nodes = new ArrayList<>();  		
+    	StackPane pane = new StackPane();
+    		
+    	for(Node node : board.getChildren()) {
+    		pane = (StackPane) node;
+    		nodes.add(pane);
+    	}   		
+    	return nodes;  		
+    }
+	
 }
